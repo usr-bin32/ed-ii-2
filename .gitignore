@@ -36,3 +36,7 @@
 
 # CMake
 build
+
+# Main (usada para teste local)
+src/main.cpp
+
