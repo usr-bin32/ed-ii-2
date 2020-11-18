@@ -34,7 +34,7 @@ int hashing::function_hash(int id, int tam)
 {
     double A = (sqrt(5) - 1)/2;   // valor sugerido por Knuth
     A =  A * id;
-    A = (A - floor(A))*tam;   // A = (A mod 1)*N
+    A = (A - floor(A))*tam;     // A = (A mod 1)*N
     A = floor(A);
 
     return A;

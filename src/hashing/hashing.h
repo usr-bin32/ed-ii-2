@@ -29,17 +29,17 @@ class hashing
       int tam_books, tam_authors;
       std::vector<std::list<hash_node<int>>> authors;
       std::vector<std::list<hash_node<std::vector<int>>>> books;
-
       template <typename T> hash_node<T> aux_insert(int key, T value, std::string info);
       bool is_exist_author (int id); //verifica se o id do autor já foi inserido, se sim soma 1 na frequencia 
+   // void search_author(); //utlizando o id, recupera o nome do autor
 
       //A função hash utilizada foi a da multiplicação
       //motivo da escolha se da por não se ter o conhecimento do valor N de entrada
       //utilizando esse método não teremos problemas se tamanho da hash for potência de 2 por exemplo.
       int function_hash(int id, int tam);
 
-      //utlizando o id, recupera o nome do autor
-     // void search_author();
+      
+     
 };
 
 #endif // HASHING_H
