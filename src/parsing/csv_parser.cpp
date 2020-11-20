@@ -41,7 +41,7 @@ bool csv_parser::read_line() {
 }
 
 bool csv_parser::read_buffer_line() {
-    this->handles.clear();
+    this->columns.clear();
 
     int j = this->index;
     bool in_quotes = false;
@@ -73,7 +73,7 @@ bool csv_parser::read_buffer_line() {
                     length -= 2;
                 }
 
-                this->handles.push_back({position, length});
+                this->columns.push_back({position, length});
 
                 // posição da próxima coluna
                 j = i + 1;
@@ -96,16 +96,16 @@ bool csv_parser::read_buffer_line() {
 
 template <>
 bool csv_parser::get<std::string>(size_t index, std::string &out) {
-    if (index >= this->handles.size()) {
+    if (index >= this->columns.size()) {
         return false;
     }
 
-    csv_handle handle = this->handles[index];
-    if (handle.length == 0) {
+    csv_column column = this->columns[index];
+    if (column.length == 0) {
         return false;
     }
 
-    out = std::string(&this->buffer[handle.position], handle.length);
+    out = std::string(&this->buffer[column.position], column.length);
 
     return true;
 }

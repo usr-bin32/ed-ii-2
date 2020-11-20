@@ -6,7 +6,7 @@
 #include <vector>
 #include <fstream>
 
-struct csv_handle {
+struct csv_column {
     // Posição da coluna na linha
     size_t position;
     // Comprimento em bytes do conteúdo da coluna
@@ -38,7 +38,7 @@ class csv_parser {
     size_t characters_read = 0;
 
     // Armazena os dados das colunas da última linha lida
-    std::vector<csv_handle> handles;
+    std::vector<csv_column> columns;
 
     // Interpreta a próxima linha de .csv presente no buffer
     bool read_buffer_line();
@@ -86,7 +86,7 @@ inline bool csv_parser::get(size_t index, T &out, const char *format) {
         return false;
     }
 
-    csv_handle handle = this->handles[index];
+    csv_column handle = this->handles[index];
     if (handle.length == 0) {
         return false;
     }
