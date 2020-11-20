@@ -10,8 +10,11 @@
 #include "../structures/book.h"
 
 void test_hashing() {
-    int m, n;
+    int n;
+    std::cout << "Insira o valor de N: ";
     std::cin >> n;
+
+    int m;
     std::cout << "Insira o valor de M: ";
     std::cin >> m;
 
