@@ -80,6 +80,9 @@ bool csv_parser::get<float>(size_t index, float &out);
 template <>
 bool csv_parser::get<double>(size_t index, double &out);
 
+template<>
+bool csv_parser::get<std::vector<int>>(size_t index, std::vector<int> &out);
+
 template <typename T>
 inline bool csv_parser::get(size_t index, T &out, const char *format) {
     if (index >= this->columns.size()) {

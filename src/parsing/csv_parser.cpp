@@ -1,5 +1,7 @@
 #include <cstring>
 #include <fstream>
+#include <regex>
+#include <sstream>
 
 #include "csv_parser.h"
 
@@ -158,4 +160,26 @@ bool csv_parser::get<float>(size_t index, float &out) {
 template <>
 bool csv_parser::get<double>(size_t index, double &out) {
     return this->get(index, out, "%lf");
+}
+
+template <>
+bool csv_parser::get<std::vector<int>>(size_t index, std::vector<int> &out) {
+    // lê a coluna como string
+    std::string s;
+    if (!this->get(index, s)) {
+        return false;
+    }
+
+    // filtra os caracteres '[', ']' e ','
+    std::istringstream ss(std::regex_replace(s, std::regex{R"(\[|\]|,)"}, " "));
+    std::string token;
+    while (ss >> token) {
+        try {
+            out.push_back(std::stoi(token));
+        } catch (...) {
+            continue;
+        }
+    }
+
+    return true;
 }
