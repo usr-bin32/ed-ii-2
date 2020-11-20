@@ -9,7 +9,12 @@
 #include "../structures/author.h"
 #include "../structures/book.h"
 
-void test_hashing(int n, int m) {
+void test_hashing() {
+    int m, n;
+    std::cin >> n;
+    std::cout << "Insira o valor de M: ";
+    std::cin >> m;
+
     // hash<author> authors;
     // read_authors(authors);
 
