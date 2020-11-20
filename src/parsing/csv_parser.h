@@ -82,16 +82,16 @@ bool csv_parser::get<double>(size_t index, double &out);
 
 template <typename T>
 inline bool csv_parser::get(size_t index, T &out, const char *format) {
-    if (index >= this->handles.size()) {
+    if (index >= this->columns.size()) {
         return false;
     }
 
-    csv_column handle = this->handles[index];
-    if (handle.length == 0) {
+    csv_column column = this->columns[index];
+    if (column.length == 0) {
         return false;
     }
 
-    sscanf(&this->buffer[handle.position], format, &out);
+    sscanf(&this->buffer[column.position], format, &out);
 
     return true;
 }
