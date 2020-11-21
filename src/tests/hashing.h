@@ -32,7 +32,8 @@ void test_hashing() {
         }
     }
 
-    std::vector<author> author_vec; // = convert_from_hash(authors);
+    std::vector<author> author_vec;
+    // authors.to_vec(author_vec);
     quick_sort(author_vec.data(), author_vec.size());
 
     for (int i = 0; i < m; i++) {
@@ -49,14 +50,14 @@ void read_books(std::vector<book> &books) {
         return;
     }
 
-    // pula o cabeçalho do arquivo .csv
-    parser.read_line();
-
     while (parser.read_line()) {
         book b;
         parser.get(0, b.author_ids);
         books.push_back(std::move(b));
     }
+
+    // hash<book> books_hash;
+    // books_hash.to_vec(books);
 }
 
 void shuffle(std::vector<book> &books) {
