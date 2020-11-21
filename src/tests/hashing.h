@@ -28,7 +28,7 @@ void test_hashing() {
 
     for (auto &b : books) {
         for (int id : b.author_ids) {
-            // authors[id].occurrences += 1;
+            // authors[id].occurrences += 1; ou authors.find(id).occurrences += 1
         }
     }
 
@@ -50,13 +50,19 @@ void read_books(std::vector<book> &books) {
         return;
     }
 
+    // hash<book> books_hash;
+
     while (parser.read_line()) {
         book b;
         parser.get(0, b.author_ids);
+
+        // int id;
+        // parser.get(4, id);
+        // books_hash[id] = b; ou books_hash.insert(id, b);
+
         books.push_back(std::move(b));
     }
 
-    // hash<book> books_hash;
     // books_hash.to_vec(books);
 }
 
