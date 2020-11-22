@@ -105,8 +105,20 @@ void hashing::creat_all_authors()
 }
 
 
+std::vector<hash_node<int>> hashing::extract_authors()
+{
+    std::vector<hash_node<int>> extract_authors;
 
+    for(int i = 0; i < tam_authors; i++)
+    {
+        for(hash_node<int> data : authors[i])
+        {
+            extract_authors.push_back(data);
+        }
+    }
 
+    return extract_authors;
+}
 
 ///////////////////////////////////////////////////////////// 
 //  teste 

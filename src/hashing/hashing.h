@@ -22,6 +22,7 @@ class hashing
       ~hashing ();
       void insert_book (int id_book, std::vector<int> ids_authors, std::string info);
       void insert_authors ();
+      std::vector<hash_node<int>> extract_authors();
 
       void print(int tam); //feita para testes, apagar dps
       
