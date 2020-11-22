@@ -18,7 +18,7 @@ struct Node
     Node *left, *right, *parent;
 
     // Constructor
-    Node (T data, int key)
+    Node(T data, int key)
     {
         this->data = data;
         this->key = key;
@@ -41,6 +41,7 @@ public:
     // Constructor
     red_black_tree() { root = NULL; };
     void insert(T data, int key);
+    T search(int key);
 };
 
 template <typename T>
@@ -65,6 +66,34 @@ Node<T> *aux_insert(Node<T> *root, Node<T> *pt)
     /* retornar o ponteiro do nó (inalterado) */
     return root;
 };
+template <typename T>
+T red_black_tree<T>::search(int key)
+{
+    if (this->root->key == key)
+    {
+        return root->data;
+    }
+    else
+    {
+        return aux_search(this->root, key);
+    }
+}
+
+template <typename T>
+T aux_search(Node<T> *aux, int key)
+{
+    if (aux->key > key)
+    {
+        return aux_search(aux->left, key);
+    }
+    else if (aux->key < key)
+    {
+        return aux_search(aux->right, key);
+    }else {
+        return aux;
+    }
+}
+
 template <typename T>
 void red_black_tree<T>::rotate_left(Node<T> *&root, Node<T> *&pt)
 {
