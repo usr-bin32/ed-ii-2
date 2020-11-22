@@ -40,57 +40,72 @@ protected:
 public:
     // Constructor
     red_black_tree() { root = NULL; };
-    void insert(T data, int key);
-    T search(int key);
+    void insert(T data, int key, int &comparisonsCounter);
+    T search(int key, int &comparisonsCounter);
 };
 
 template <typename T>
-Node<T> *aux_insert(Node<T> *root, Node<T> *pt)
+Node<T> *aux_insert(Node<T> *root, Node<T> *pt, int &comparisonsCounter)
 {
+
     /* Se a árvore estiver vazia, retorna um novo nó */
+    comparisonsCounter++;
     if (root == NULL)
         return pt;
 
     /* Caso contrário, volte para baixo na árvore */
+    comparisonsCounter++;
     if (pt->key < root->key)
     {
         root->left = aux_insert(root->left, pt);
         root->left->parent = root;
     }
-    else if (pt->key > root->key)
+    else
     {
-        root->right = aux_insert(root->right, pt);
-        root->right->parent = root;
+        comparisonsCounter++;
+        if (pt->key > root->key)
+        {
+            root->right = aux_insert(root->right, pt);
+            root->right->parent = root;
+        }
     }
 
     /* retornar o ponteiro do nó (inalterado) */
     return root;
 };
 template <typename T>
-T red_black_tree<T>::search(int key)
+T red_black_tree<T>::search(int key, int &comparisonsCounter)
 {
+    comparisonsCounter++;
     if (this->root->key == key)
     {
         return root->data;
     }
     else
     {
-        return aux_search(this->root, key);
+        return aux_search(this->root, key, comparisonsCounter);
     }
 }
 
 template <typename T>
-T aux_search(Node<T> *aux, int key)
+T aux_search(Node<T> *aux, int key, int &comparisonsCounter)
 {
+    comparisonsCounter++;
     if (aux->key > key)
     {
         return aux_search(aux->left, key);
     }
-    else if (aux->key < key)
+    else
     {
-        return aux_search(aux->right, key);
-    }else {
-        return aux;
+        comparisonsCounter++;
+        if (aux->key < key)
+        {
+            return aux_search(aux->right, key);
+        }
+        else
+        {
+            return aux;
+        }
     }
 }
 
@@ -244,12 +259,12 @@ void red_black_tree<T>::fix_violation(Node<T> *&root, Node<T> *&pt)
 
 template <typename T>
 // inseri um novo valor na arvore
-void red_black_tree<T>::insert(T data, int key)
+void red_black_tree<T>::insert(T data, int key, int &comparisonsCounter)
 {
     Node<T> *pt = new Node<T>(data, key);
 
     // insere o nó
-    root = aux_insert(root, pt);
+    root = aux_insert(root, pt, comparisonsCounter);
 
     // verifica as condições para inserção do novo nó
     fix_violation(root, pt);
