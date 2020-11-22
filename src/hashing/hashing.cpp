@@ -20,9 +20,7 @@ hashing::hashing (int N_book, int N_author)
  
 hashing::~hashing ()
 {
-    destroy(tam_authors, authors);
-  
-    // all_authors e books são destruidos após seus dados serem inseridos em authors
+
 }
 
 int hashing::function_hash(int id, int tam)
@@ -58,9 +56,6 @@ void hashing::insert_authors ()
             
         }
     }
-
-    destroy(tam_books, books);
-    destroy(tam_all_authors, all_authors);
 }
      
 template <typename T> hash_node<T> hashing::aux_insert(int key, T value, std::string info)
@@ -106,46 +101,9 @@ std::string hashing::search_author(int id)
 
 void hashing::creat_all_authors()
 {
-    std::ifstream data("hashing/authors.csv");
-    std::string line, auxLine;
-    int lineId;
-
-    if(data.is_open())
-    {   
-        tam_all_authors = std::count(std::istreambuf_iterator<char>(data), std::istreambuf_iterator<char>(), '\n'); // num de lines do csv
-        tam_all_authors = tam_all_authors + int(tam_all_authors * 0.35);  // porcetagem de espaço adicional
-        all_authors.resize(tam_all_authors);
-        data.clear();
-        data.seekg (0);
-
-        getline(data,line); // pula o cabeçario da tabela
-
-        while(getline(data,line))
-        {   
-            auxLine = line.substr(0, line.find("\",\""));   // separa o id do restante da string
-            auxLine.erase(0, 1);
-            
-            try{lineId = stoll(auxLine);}catch(std::invalid_argument){lineId = 0;} 
-            line.erase(0, line.find("\",\"") +3);   // separa o nome do autor do restante da string
-            line.erase(line.size() - 1);
-
-            all_authors[function_hash(lineId, tam_all_authors)].emplace_front(aux_insert<std::string>(lineId, line, line)); 
-        }
-
-    }else std::cout << "Error opening file 'authors.csv' ";
-
-    data.close(); 
+    //..
 }
 
-template<typename T> void hashing::destroy(int tam, std::vector<std::list<hash_node<T>>> &table)
-{
-    for (int i = 0; i < tam; i++)
-    {
-		table[i].clear();
-	}
-
-    table.clear();
-}
 
 
 

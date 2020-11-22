@@ -33,7 +33,6 @@ class hashing
       std::vector<std::list<hash_node<std::vector<int>>>> books;
 
       template <typename T> hash_node<T> aux_insert(int key, T value, std::string info);
-      template <typename T> void destroy (int tam, std::vector<std::list<hash_node<T>>> &table);
       void creat_all_authors();  // tabela hash contendo todos os autores do authors.csv
       bool is_exist_author (int id);  //verifica se o id do autor já foi inserido, se sim soma 1 na frequencia 
       std::string search_author(int id);  // recupera o nome do autor
