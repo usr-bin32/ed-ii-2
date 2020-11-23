@@ -6,14 +6,16 @@
 template <typename T>
 class btree {
   public:
-    int degree;
-    bnode<T> *root;
     btree(int degree1);
 
     bnode<T> *search(int key);
     void insert(int key);
     void walk();
     void remove(int key);
+
+  private:
+    int degree;
+    bnode<T> *root;
 };
 
 template <typename T>

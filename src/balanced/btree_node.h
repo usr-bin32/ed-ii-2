@@ -6,18 +6,22 @@
 template <typename T>
 class bnode {
   public:
+    bnode(int degree1, bool leaf1);
+
+    bool leaf;
+    bnode **child;
     int *keys;
     int key_numbers;
-    bool leaf;
-    int degree;
-    bnode **child;
-
-    bnode(int degree1, bool leaf1);
 
     bnode *search(int key);
     void insert_not_full(int key);
-    void split(bnode *node, int index);
     void walk();
+    void split(bnode *node, int index);
+    void remove(int key);
+
+  private:
+    int degree;
+
     int search_key(int key);
     void remove_leaf(int i);
     void remove_not_leaf(int i);
@@ -27,7 +31,6 @@ class bnode {
     void borrow_key_before(int i);
     void borrow_key_after(int i);
     void merge(int i);
-    void remove(int key);
 };
 
 template <typename T>

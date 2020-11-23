@@ -2,5 +2,9 @@
 #include "balanced/btree.h"
 
 int main() {
-    return 0;
+    btree<int> b(1);
+    b.insert(2);
+    b.search(2);
+    b.walk();
+    b.remove(2);
 }
