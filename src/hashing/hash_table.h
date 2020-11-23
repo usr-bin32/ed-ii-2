@@ -1,25 +1,15 @@
 #include <cmath>
-#include <functional>
+#include <list>
 #include <vector>
 
-constexpr int EMPTY_RECORD_KEY = -1;
-
 template <typename T>
-struct record {
-    record() {
-        this->key = EMPTY_RECORD_KEY;
-    }
-
-    record(int key, T const &data) {
+struct hash_node {
+    hash_node(unsigned int key, T const &data) {
         this->key = key;
         this->data = data;
     }
 
-    bool empty() {
-        return this->key == EMPTY_RECORD_KEY;
-    }
-
-    int key;
+    unsigned int key;
     T data;
 };
 
@@ -30,74 +20,61 @@ class hash_table {
         this->table.resize(m);
     }
 
-    T *insert(int key, T const &data) {
-        record<T> *record = this->probe(key);
-        if (record == nullptr) {
-            return nullptr;
+    T *insert(unsigned int key, T const &data) {
+        unsigned int index = this->hash_function(key, table.size());
+
+        T *data_ptr = lookup_index(key, index);
+        if (data_ptr != nullptr) {
+            // caso a chave já esteja ocupada, não fazer nada
+        } else {
+            this->table[index].emplace_front(key, data);
+            data_ptr = &this->table[index].front().data;
         }
 
-        record->key = key;
-        record->data = data;
-
-        return &record->data;
+        return data_ptr;
     }
 
-    T *lookup(int key) {
-        record<T> *record = this->probe(key);
-        if (record == nullptr || record->empty()) {
-            return nullptr;
-        }
-        return &record->data;
+    T *search(unsigned int key) {
+        unsigned int index = this->hash_function(key, table.size());
+        return lookup_index(key, index);
     }
 
     unsigned int collisions() {
-        unsigned int count = 0;
-        for (auto &record : this->table) {
-            if (!record.empty()) {
-                count += this->probe_collisions(record.key);
+        unsigned int result = 0;
+        for (auto const &list : this->table) {
+            if (list.empty()) {
+                continue;
+            }
+            result += list.size() - 1;
+        }
+        return result;
+    }
+
+    void to_vector(std::vector<T> &vector) {
+        for (auto const &list : this->table) {
+            for (auto const &node : list) {
+                vector.push_back(node.data);
             }
         }
-        return count;
     }
-    std::vector<record<T>> table;
 
   private:
-    unsigned int probe(int key, record<T> *&result) {
-        unsigned int i;
-        for (i = 0; i < this->table.size(); i++) {
-            record<T> *record = &this->table[hash(key, i)];
+    std::vector<std::list<hash_node<T>>> table;
 
-            if (record->empty() || record->key == key) {
-                result = record;
+    T *lookup_index(unsigned int key, unsigned int index) {
+        T *data_ptr = nullptr;
+        for (auto &node : this->table[index]) {
+            if (node.key == key) {
+                data_ptr = &node.data;
                 break;
             }
         }
-        return i;
+
+        return data_ptr;
     }
 
-    record<T> *probe(int key) {
-        record<T> *record = nullptr;
-        this->probe(key, record);
-
-        return record;
-    }
-
-    unsigned int probe_collisions(int key) {
-        record<T> *_ = nullptr;
-        return this->probe(key, _);
-    }
-
-    int hash(int key, int index) {
-        unsigned int m = this->table.size();
-        return (h1(key, m) + index * h2(key, m)) % m;
-    }
-
-    int h1(int k, unsigned int m) {
-        return k % m;
-    }
-
-    int h2(int k, int m) {
-        double A = 0.6180339887;
-        return static_cast<int>(m * (k * A - static_cast<int>(k * A)));
+    unsigned int hash_function(unsigned int key, unsigned int m) {
+        double A = (sqrt(5) - 1) / 2;
+        return floor(m * (fmod(key * A, 1)));
     }
 };

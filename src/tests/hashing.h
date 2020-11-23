@@ -4,6 +4,7 @@
 #include <random>
 #include <vector>
 
+#include "../hashing/hash_table.h"
 #include "../parsing/csv_parser.h"
 #include "../sorting/quick_sort.h"
 #include "../structures/author.h"
@@ -18,7 +19,7 @@ void test_hashing() {
     std::cout << "Insira o valor de M: ";
     std::cin >> m;
 
-    // hash<author> authors;
+    // hash_table<author> all_authors;
     // read_authors(authors);
 
     std::vector<book> books;
@@ -26,14 +27,17 @@ void test_hashing() {
     shuffle(books);
     books.resize(n);
 
+    // armazenar os livros lidos em uma hash table
+    // criar uma nova hash_table de autores
+
     for (auto &b : books) {
         for (int id : b.author_ids) {
-            // authors[id].occurrences += 1; ou authors.find(id).occurrences += 1
+            // authors.insert(id)->occurrences += 1
         }
     }
 
     std::vector<author> author_vec;
-    // authors.to_vec(author_vec);
+    // authors.to_vector(author_vec);
     quick_sort(author_vec.data(), author_vec.size());
 
     for (int i = 0; i < m; i++) {
@@ -50,20 +54,12 @@ void read_books(std::vector<book> &books) {
         return;
     }
 
-    // hash<book> books_hash;
-
     while (parser.read_line()) {
         book b;
         parser.get(0, b.author_ids);
 
-        // int id;
-        // parser.get(4, id);
-        // books_hash[id] = b; ou books_hash.insert(id, b);
-
         books.push_back(std::move(b));
     }
-
-    // books_hash.to_vec(books);
 }
 
 void shuffle(std::vector<book> &books) {

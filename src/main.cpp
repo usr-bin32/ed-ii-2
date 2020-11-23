@@ -10,5 +10,5 @@ int main() {
     std::string s = "s";
     table.insert(5, std::move(s));
     table.insert(3, "Ana");
-    std::cout << *table.lookup(3) << std::endl;
+    std::cout << *table.search(3) << std::endl;
 }
