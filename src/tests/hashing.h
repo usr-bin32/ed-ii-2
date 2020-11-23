@@ -29,7 +29,7 @@ void test_hashing() {
     books.resize(n);
 
     // armazenar os livros lidos em uma hash table
-    // criar uma nova hash_table com key = id e value = contagem
+    // criar uma nova hash_table com key = id e value = author { id,  contagem }
 
     for (auto &b : books) {
         for (int id : b.authors) {
@@ -58,7 +58,7 @@ void read_books(std::vector<book> &books) {
 
     while (parser.read_line()) {
         book b;
-        parser.get(0, b.author_ids);
+        parser.get(0, b.authors);
 
         books.push_back(std::move(b));
     }
