@@ -253,12 +253,12 @@ void bnode<T>::remove(int key) {
         if (leaf)
             return;
 
-        bool isPresent = ((i == key_numbers) ? true : false);
+        bool is_present = ((i == key_numbers) ? true : false);
 
         if (child[i]->key_numbers < degree)
             fill_child(i);
 
-        if (isPresent && i > key_numbers)
+        if (is_present && i > key_numbers)
             child[i - 1]->remove(key);
 
         else
