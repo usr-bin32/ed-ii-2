@@ -29,6 +29,8 @@ class hash_table {
         this->table.resize(m);
     }
 
+    std::vector<record<T>> table;
+
     T *insert(int key, T const &data) {
         record<T> *record = this->probe(key);
         if (record == nullptr) {
@@ -58,7 +60,14 @@ class hash_table {
         }
         return count;
     }
-    std::vector<record<T>> table;
+
+    void to_vector(std::vector<T> &vector) {
+        for (auto const &record : this->table) {
+            if (!record.empty()) {
+                vector.push_back(this->table);
+            }
+        }
+    }
 
   private:
     unsigned int probe(int key, record<T> *&result) {

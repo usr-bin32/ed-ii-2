@@ -2,6 +2,7 @@
 #include <chrono>
 #include <iostream>
 #include <random>
+#include <string>
 #include <vector>
 
 #include "../hashing/hash_table.h"
@@ -19,8 +20,8 @@ void test_hashing() {
     std::cout << "Insira o valor de M: ";
     std::cin >> m;
 
-    // hash_table<author> all_authors;
-    // read_authors(authors);
+    // hash_table<std::string> author_names;
+    // read_authors(author_names);
 
     std::vector<book> books;
     read_books(books);
@@ -28,14 +29,11 @@ void test_hashing() {
     books.resize(n);
 
     // armazenar os livros lidos em uma hash table
-    // criar uma nova hash_table de autores
+    // criar uma nova hash_table com key = id e value = contagem
 
     for (auto &b : books) {
         for (int id : b.author_ids) {
-            // author default;
-            // author *a = authors.insert(id, default);
-            // if (a.name.empty()) a.name = all_books.search(id)->name;
-            // a->occurrences += 1;
+            //
         }
     }
 
@@ -44,8 +42,9 @@ void test_hashing() {
     quick_sort(author_vec.data(), author_vec.size());
 
     for (int i = 0; i < m; i++) {
-        std::cout << author_vec[i].name << ": " << author_vec[i].occurrences
-                  << std::endl;
+        // std::cout << author_names[author_vec[i].id] << ": " <<
+        // author_vec[i].occurrences
+        //           << std::endl;
     }
 }
 
