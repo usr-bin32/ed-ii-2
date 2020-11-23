@@ -1,3 +1,2 @@
-void test_balanced() {
+void test_balanced();
 
-}
