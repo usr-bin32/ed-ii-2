@@ -18,25 +18,24 @@ class red_black_tree {
     red_black_tree() {
         root = nullptr;
     };
-    void insert(T data, int key, int &comparisonsCounter);
-    T search(int key, int &comparisonsCounter);
+    void insert(T data, int key, int &comparisons);
+    T search(int key, int &comparisons);
 };
 
 template <typename T>
-rbnode<T> *aux_insert(rbnode<T> *root, rbnode<T> *pt, int &comparisonsCounter) {
-
+rbnode<T> *aux_insert(rbnode<T> *root, rbnode<T> *pt, int &comparisons) {
     /* Se a árvore estiver vazia, retorna um novo nó */
-    comparisonsCounter++;
+    comparisons++;
     if (root == nullptr)
         return pt;
 
     /* Caso contrário, volte para baixo na árvore */
-    comparisonsCounter++;
+    comparisons++;
     if (pt->key < root->key) {
         root->left = aux_insert(root->left, pt);
         root->left->parent = root;
     } else {
-        comparisonsCounter++;
+        comparisons++;
         if (pt->key > root->key) {
             root->right = aux_insert(root->right, pt);
             root->right->parent = root;
@@ -46,23 +45,24 @@ rbnode<T> *aux_insert(rbnode<T> *root, rbnode<T> *pt, int &comparisonsCounter) {
     /* retornar o ponteiro do nó (inalterado) */
     return root;
 };
+
 template <typename T>
-T red_black_tree<T>::search(int key, int &comparisonsCounter) {
-    comparisonsCounter++;
+T red_black_tree<T>::search(int key, int &comparisons) {
+    comparisons++;
     if (this->root->key == key) {
         return root->data;
     } else {
-        return aux_search(this->root, key, comparisonsCounter);
+        return aux_search(this->root, key, comparisons);
     }
 }
 
 template <typename T>
-T aux_search(rbnode<T> *aux, int key, int &comparisonsCounter) {
-    comparisonsCounter++;
+T aux_search(rbnode<T> *aux, int key, int &comparisons) {
+    comparisons++;
     if (aux->key > key) {
         return aux_search(aux->left, key);
     } else {
-        comparisonsCounter++;
+        comparisons++;
         if (aux->key < key) {
             return aux_search(aux->right, key);
         } else {
@@ -94,6 +94,7 @@ void red_black_tree<T>::rotate_left(rbnode<T> *&root, rbnode<T> *&pt) {
     pt_right->left = pt;
     pt->parent = pt_right;
 };
+
 template <typename T>
 void red_black_tree<T>::rotate_right(rbnode<T> *&root, rbnode<T> *&pt) {
     rbnode<T> *pt_left = pt->left;
@@ -204,11 +205,11 @@ void red_black_tree<T>::fix_violation(rbnode<T> *&root, rbnode<T> *&pt) {
 
 template <typename T>
 // inseri um novo valor na arvore
-void red_black_tree<T>::insert(T data, int key, int &comparisonsCounter) {
+void red_black_tree<T>::insert(T data, int key, int &comparisons) {
     rbnode<T> *pt = new rbnode<T>(data, key);
 
     // insere o nó
-    root = aux_insert(root, pt, comparisonsCounter);
+    root = aux_insert(root, pt, comparisons);
 
     // verifica as condições para inserção do novo nó
     fix_violation(root, pt);
