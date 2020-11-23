@@ -5,21 +5,20 @@
 
 template <typename T>
 class red_black_tree {
+  public:
+    red_black_tree() {
+        root = nullptr;
+    };
+
+    void insert(T data, int key, int &comparisons);
+    T search(int key, int &comparisons);
+
   private:
     rbnode<T> *root;
-
-  protected:
     void rotate_left(rbnode<T> *&, rbnode<T> *&);
     void rotate_right(rbnode<T> *&, rbnode<T> *&);
     void fix_violation(rbnode<T> *&, rbnode<T> *&);
 
-  public:
-    // Constructor
-    red_black_tree() {
-        root = nullptr;
-    };
-    void insert(T data, int key, int &comparisons);
-    T search(int key, int &comparisons);
 };
 
 template <typename T>
