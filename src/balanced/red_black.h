@@ -18,7 +18,6 @@ class red_black_tree {
     void rotate_left(rbnode<T> *&, rbnode<T> *&);
     void rotate_right(rbnode<T> *&, rbnode<T> *&);
     void fix_violation(rbnode<T> *&, rbnode<T> *&);
-
 };
 
 template <typename T>
