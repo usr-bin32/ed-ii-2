@@ -1,20 +1,22 @@
 #ifndef BTREE_NODE_H
 #define BTREE_NODE_H
 
+#include <iostream>
+
 template <typename T>
-class node {
+class bnode {
   public:
     int *keys;
     int key_numbers;
     bool leaf;
     int degree;
-    node **child;
+    bnode **child;
 
-    node(int degree1, bool leaf1);
+    bnode(int degree1, bool leaf1);
 
-    node *search(int key);
+    bnode *search(int key);
     void insert_not_full(int key);
-    void split(node *node, int index);
+    void split(bnode *node, int index);
     void walk();
     int search_key(int key);
     void remove_leaf(int i);
@@ -29,30 +31,30 @@ class node {
 };
 
 template <typename T>
-node<T>::node(int degree1, bool leaf1) {
+bnode<T>::bnode(int degree1, bool leaf1) {
     degree = degree1;
     leaf = leaf1;
 
     keys = new int[2 * degree - 1];
-    child = new node<T> *[2 * degree];
+    child = new bnode<T> *[2 * degree];
 
     key_numbers = 0;
 }
 
 template <typename T>
-void node<T>::walk() {
+void bnode<T>::walk() {
     int i;
     for (i = 0; i < key_numbers; i++) {
         if (leaf == false)
             child[i]->walk();
-        cout << keys[i] << endl;
+        std::cout << keys[i] << std::endl;
     }
     if (leaf == false)
         child[i]->walk();
 }
 
 template <typename T>
-node<T> *node<T>::search(int key) {
+bnode<T> *bnode<T>::search(int key) {
     int i = 0;
     while (i < key_numbers && key > keys[i])
         i++;
@@ -67,7 +69,7 @@ node<T> *node<T>::search(int key) {
 }
 
 template <typename T>
-void node<T>::insert_not_full(int key) {
+void bnode<T>::insert_not_full(int key) {
     int i = key_numbers - 1;
 
     if (leaf == true) {
@@ -92,8 +94,8 @@ void node<T>::insert_not_full(int key) {
 }
 
 template <typename T>
-void node<T>::split(node *node, int index) {
-    node<T> *node1 = new node(node->degree, node->leaf);
+void bnode<T>::split(bnode *node, int index) {
+    bnode<T> *node1 = new bnode(node->degree, node->leaf);
     node1->key_numbers = degree - 1;
 
     for (int j = 0; j < degree - 1; j++)
@@ -119,7 +121,7 @@ void node<T>::split(node *node, int index) {
 }
 
 template <typename T>
-int node<T>::search_key(int key) {
+int bnode<T>::search_key(int key) {
     int i = 0;
     for (i = 0; i < key_numbers && keys[i] < key; ++i)
         ;
@@ -127,8 +129,8 @@ int node<T>::search_key(int key) {
 }
 
 template <typename T>
-int node<T>::get_predecessor(int i) {
-    node<T> *node = child[i];
+int bnode<T>::get_predecessor(int i) {
+    bnode<T> *node = child[i];
     while (!node->leaf)
         node = node->child[node->key_numbers];
 
@@ -136,8 +138,8 @@ int node<T>::get_predecessor(int i) {
 }
 
 template <typename T>
-int node<T>::get_successor(int i) {
-    node<T> *node = child[i + 1];
+int bnode<T>::get_successor(int i) {
+    bnode<T> *node = child[i + 1];
     while (!node->leaf)
         node = node->child[0];
 
@@ -145,7 +147,7 @@ int node<T>::get_successor(int i) {
 }
 
 template <typename T>
-void node<T>::fill_child(int i) {
+void bnode<T>::fill_child(int i) {
     if (i != key_numbers && child[i + 1]->key_numbers >= degree)
         borrow_key_before(i);
 
@@ -161,9 +163,9 @@ void node<T>::fill_child(int i) {
 }
 
 template <typename T>
-void node<T>::borrow_key_before(int i) {
-    node<T> *c = child[i];
-    node<T> *sib = child[i - 1];
+void bnode<T>::borrow_key_before(int i) {
+    bnode<T> *c = child[i];
+    bnode<T> *sib = child[i - 1];
 
     for (int j = c->key_numbers - 1; j >= 0; --j)
         c->keys[j + 1] = c->keys[j];
@@ -185,9 +187,9 @@ void node<T>::borrow_key_before(int i) {
 }
 
 template <typename T>
-void node<T>::borrow_key_after(int i) {
-    node<T> *c = child[i];
-    node<T> *sib = child[i + 1];
+void bnode<T>::borrow_key_after(int i) {
+    bnode<T> *c = child[i];
+    bnode<T> *sib = child[i + 1];
 
     c->keys[(c->key_numbers)] = keys[i];
 
@@ -210,9 +212,9 @@ void node<T>::borrow_key_after(int i) {
 }
 
 template <typename T>
-void node<T>::merge(int i) {
-    node<T> *c = child[i];
-    node<T> *sib = child[i + 1];
+void bnode<T>::merge(int i) {
+    bnode<T> *c = child[i];
+    bnode<T> *sib = child[i + 1];
 
     c->keys[degree - 1] = keys[i];
 
@@ -237,7 +239,7 @@ void node<T>::merge(int i) {
 }
 
 template <typename T>
-void node<T>::remove(int key) {
+void bnode<T>::remove(int key) {
     int i = search_key(key);
     if (i < key_numbers && keys[i] == key) {
         if (!leaf)
@@ -262,7 +264,7 @@ void node<T>::remove(int key) {
 }
 
 template <typename T>
-void node<T>::remove_leaf(int i) {
+void bnode<T>::remove_leaf(int i) {
     for (int j = i + 1; j < key_numbers; ++j)
         keys[j - 1] = keys[j];
 
@@ -270,7 +272,7 @@ void node<T>::remove_leaf(int i) {
 }
 
 template <typename T>
-void node<T>::remove_not_leaf(int i) {
+void bnode<T>::remove_not_leaf(int i) {
     int key = keys[i];
 
     if (child[i]->key_numbers >= degree) {

@@ -1,3 +1,6 @@
+#ifndef QUICK_SORT_H
+#define QUICK_SORT_H
+
 #include <cstdlib>
 
 // particiona o vetor e o rearranja de forma que todos os elementos anteriores
@@ -45,3 +48,5 @@ template <typename T>
 void quick_sort(T *arr, size_t size) {
     quick_sort(arr, 0, size - 1);
 }
+
+#endif

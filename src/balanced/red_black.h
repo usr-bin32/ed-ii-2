@@ -3,17 +3,15 @@
 
 #include "red_black_node.h"
 
-enum Color { RED, BLACK };
-
 template <typename T>
 class red_black_tree {
   private:
-    node<T> *root;
+    rbnode<T> *root;
 
   protected:
-    void rotate_left(node<T> *&, node<T> *&);
-    void rotate_right(node<T> *&, node<T> *&);
-    void fix_violation(node<T> *&, node<T> *&);
+    void rotate_left(rbnode<T> *&, rbnode<T> *&);
+    void rotate_right(rbnode<T> *&, rbnode<T> *&);
+    void fix_violation(rbnode<T> *&, rbnode<T> *&);
 
   public:
     // Constructor
@@ -25,7 +23,7 @@ class red_black_tree {
 };
 
 template <typename T>
-node<T> *aux_insert(node<T> *root, node<T> *pt, int &comparisonsCounter) {
+rbnode<T> *aux_insert(rbnode<T> *root, rbnode<T> *pt, int &comparisonsCounter) {
 
     /* Se a árvore estiver vazia, retorna um novo nó */
     comparisonsCounter++;
@@ -59,7 +57,7 @@ T red_black_tree<T>::search(int key, int &comparisonsCounter) {
 }
 
 template <typename T>
-T aux_search(node<T> *aux, int key, int &comparisonsCounter) {
+T aux_search(rbnode<T> *aux, int key, int &comparisonsCounter) {
     comparisonsCounter++;
     if (aux->key > key) {
         return aux_search(aux->left, key);
@@ -74,8 +72,8 @@ T aux_search(node<T> *aux, int key, int &comparisonsCounter) {
 }
 
 template <typename T>
-void red_black_tree<T>::rotate_left(node<T> *&root, node<T> *&pt) {
-    node<T> *pt_right = pt->right;
+void red_black_tree<T>::rotate_left(rbnode<T> *&root, rbnode<T> *&pt) {
+    rbnode<T> *pt_right = pt->right;
 
     pt->right = pt_right->left;
 
@@ -97,8 +95,8 @@ void red_black_tree<T>::rotate_left(node<T> *&root, node<T> *&pt) {
     pt->parent = pt_right;
 };
 template <typename T>
-void red_black_tree<T>::rotate_right(node<T> *&root, node<T> *&pt) {
-    node<T> *pt_left = pt->left;
+void red_black_tree<T>::rotate_right(rbnode<T> *&root, rbnode<T> *&pt) {
+    rbnode<T> *pt_left = pt->left;
 
     pt->left = pt_left->right;
 
@@ -122,9 +120,9 @@ void red_black_tree<T>::rotate_right(node<T> *&root, node<T> *&pt) {
 
 // verifica as condições ao se adicionar um novo nó
 template <typename T>
-void red_black_tree<T>::fix_violation(node<T> *&root, node<T> *&pt) {
-    node<T> *parent_pt = nullptr;
-    node<T> *grand_parent_pt = nullptr;
+void red_black_tree<T>::fix_violation(rbnode<T> *&root, rbnode<T> *&pt) {
+    rbnode<T> *parent_pt = nullptr;
+    rbnode<T> *grand_parent_pt = nullptr;
 
     while ((pt != root) && (pt->color != BLACK) && (pt->parent->color == RED)) {
         parent_pt = pt->parent;
@@ -134,7 +132,7 @@ void red_black_tree<T>::fix_violation(node<T> *&root, node<T> *&pt) {
             O pai do pt é filho esquerdo do avô do pt
         */
         if (parent_pt == grand_parent_pt->left) {
-            node<T> *uncle_pt = grand_parent_pt->right;
+            rbnode<T> *uncle_pt = grand_parent_pt->right;
 
             /* Case : 1
                O tio de pt também é vermelho. Somente recoloração necessária
@@ -170,7 +168,7 @@ void red_black_tree<T>::fix_violation(node<T> *&root, node<T> *&pt) {
            O pai do pt é filho certo do avô do pt
         */
         else {
-            node<T> *uncle_pt = grand_parent_pt->left;
+            rbnode<T> *uncle_pt = grand_parent_pt->left;
 
             /*  Case : 1
                 O tio de pt também é vermelho. Somente recoloração necessária
@@ -207,7 +205,7 @@ void red_black_tree<T>::fix_violation(node<T> *&root, node<T> *&pt) {
 template <typename T>
 // inseri um novo valor na arvore
 void red_black_tree<T>::insert(T data, int key, int &comparisonsCounter) {
-    node<T> *pt = new node<T>(data, key);
+    rbnode<T> *pt = new rbnode<T>(data, key);
 
     // insere o nó
     root = aux_insert(root, pt, comparisonsCounter);

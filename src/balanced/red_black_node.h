@@ -1,15 +1,17 @@
 #ifndef RED_BLACK_NODE_H
 #define RED_BLACK_NODE_H
 
+enum Color { RED, BLACK };
+
 template <typename T>
-struct node {
+struct rbnode {
     T data;
     int key;
     bool color;
-    node *left, *right, *parent;
+    rbnode *left, *right, *parent;
 
     // Constructor
-    node(T data, int key) {
+    rbnode(T data, int key) {
         this->data = data;
         this->key = key;
         left = right = parent = nullptr;

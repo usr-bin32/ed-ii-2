@@ -1,5 +1,5 @@
-#ifndef CSV_PARSER
-#define CSV_PARSER
+#ifndef CSV_PARSER_H
+#define CSV_PARSER_H
 
 #include <array>
 #include <fstream>
