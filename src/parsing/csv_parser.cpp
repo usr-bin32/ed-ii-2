@@ -15,9 +15,9 @@ bool csv_parser::is_open() {
 
 bool csv_parser::read_line() {
     // lê a próxima linha do .csv. Caso a linha não esteja totalmente carregada
-    // na memória, a parte inicial da linha já presente na memória principal (se houver)
-    // é movida para o início do buffer e uma nova leitura de disco é executada para
-    // completar o buffer
+    // na memória, a parte inicial da linha já presente na memória principal (se
+    // houver) é movida para o início do buffer e uma nova leitura de disco é
+    // executada para completar o buffer
     if (!this->read_buffer_line()) {
         if (this->file.eof()) {
             return false;
@@ -25,11 +25,8 @@ bool csv_parser::read_line() {
 
         size_t remainder = this->characters_read;
         if (remainder > 0) {
-            strncpy(
-                this->buffer.data(),
-                &this->buffer[buffer_size - remainder],
-                remainder
-            );
+            strncpy(this->buffer.data(), &this->buffer[buffer_size - remainder],
+                    remainder);
         }
 
         file.read(&this->buffer[remainder], this->buffer.size() - remainder);

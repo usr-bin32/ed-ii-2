@@ -2,8 +2,7 @@
 #define NODE_H_INCLUDED
 
 template <typename T>
-class Node
-{
+class Node {
   public:
     int *keys;
     int key_numbers;
@@ -11,13 +10,13 @@ class Node
     int degree;
     Node **child;
     Node(int degree1, bool leaf1);
-    ~Node() {};
+    ~Node(){};
     Node *search(int key);
     void insertNotFull(int key);
     void split(Node *node, int index);
     void walk();
     int searchKey(int key);
-    void removeLeaf (int i);
+    void removeLeaf(int i);
     void removeNotLeaf(int i);
     int getPredecessor(int i);
     int getSuccessor(int i);

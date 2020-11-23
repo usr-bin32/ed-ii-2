@@ -2,9 +2,9 @@
 #define CSV_PARSER
 
 #include <array>
+#include <fstream>
 #include <string>
 #include <vector>
-#include <fstream>
 
 struct csv_column {
     // Posição da coluna na linha
@@ -14,7 +14,7 @@ struct csv_column {
 };
 
 class csv_parser {
-   public:
+  public:
     csv_parser(std::string path);
 
     bool is_open();
@@ -27,7 +27,7 @@ class csv_parser {
     template <typename T>
     bool get(size_t index, T &out);
 
-   private:
+  private:
     std::ifstream file;
 
     size_t buffer_size = 0;
@@ -80,7 +80,7 @@ bool csv_parser::get<float>(size_t index, float &out);
 template <>
 bool csv_parser::get<double>(size_t index, double &out);
 
-template<>
+template <>
 bool csv_parser::get<std::vector<int>>(size_t index, std::vector<int> &out);
 
 template <typename T>

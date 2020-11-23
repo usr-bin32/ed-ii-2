@@ -1,6 +1,7 @@
 #include <cstdlib>
 
-// particiona o vetor e o rearranja de forma que todos os elementos anteriores ao pivô sejam menores que ele e todos os posteriores sejam maiores.
+// particiona o vetor e o rearranja de forma que todos os elementos anteriores
+// ao pivô sejam menores que ele e todos os posteriores sejam maiores.
 template <typename T>
 int slice(T *arr, int first, int end) {
     int n = (end + first);
@@ -40,7 +41,7 @@ void quick_sort(T *arr, int first, int end) {
     }
 }
 
-template<typename T>
+template <typename T>
 void quick_sort(T *arr, size_t size) {
     quick_sort(arr, 0, size - 1);
 }
