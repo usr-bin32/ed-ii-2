@@ -2,5 +2,14 @@
 #include <vector>
 
 struct book {
-    std::vector<int> author_ids;
+    std::vector<int> authors;
+    int bestsellers_rank;
+    std::vector<int> categories;
+    std::string edition;
+    int id;
+    std::string isbn10;
+    std::string isbn13;
+    float rating;
+    long rating_count;
+    std::string title;
 };

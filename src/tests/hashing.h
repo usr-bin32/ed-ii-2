@@ -32,7 +32,7 @@ void test_hashing() {
     // criar uma nova hash_table com key = id e value = contagem
 
     for (auto &b : books) {
-        for (int id : b.author_ids) {
+        for (int id : b.authors) {
             //
         }
     }
