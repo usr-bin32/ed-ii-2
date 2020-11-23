@@ -201,8 +201,8 @@ void red_black_tree<T>::fix_violation(rbnode<T> *&root, rbnode<T> *&pt) {
     root->color = BLACK;
 };
 
+// insere um novo valor na arvore
 template <typename T>
-// inseri um novo valor na arvore
 void red_black_tree<T>::insert(T data, int key, int &comparisons) {
     rbnode<T> *pt = new rbnode<T>(data, key);
 
