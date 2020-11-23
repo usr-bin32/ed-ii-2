@@ -1,21 +1,46 @@
-#include "Node.h"
-#include <iostream>
-
-using namespace std;
+#ifndef BTREE_NODE_H
+#define BTREE_NODE_H
 
 template <typename T>
-Node<T>::Node(int degree1, bool leaf1) {
+class node {
+  public:
+    int *keys;
+    int key_numbers;
+    bool leaf;
+    int degree;
+    node **child;
+
+    node(int degree1, bool leaf1);
+
+    node *search(int key);
+    void insert_not_full(int key);
+    void split(node *node, int index);
+    void walk();
+    int search_key(int key);
+    void remove_leaf(int i);
+    void remove_not_leaf(int i);
+    int get_predecessor(int i);
+    int get_successor(int i);
+    void fill_child(int i);
+    void borrow_key_before(int i);
+    void borrow_key_after(int i);
+    void merge(int i);
+    void remove(int key);
+};
+
+template <typename T>
+node<T>::node(int degree1, bool leaf1) {
     degree = degree1;
     leaf = leaf1;
 
     keys = new int[2 * degree - 1];
-    child = new Node<T> *[2 * degree];
+    child = new node<T> *[2 * degree];
 
     key_numbers = 0;
 }
 
 template <typename T>
-void Node<T>::walk() {
+void node<T>::walk() {
     int i;
     for (i = 0; i < key_numbers; i++) {
         if (leaf == false)
@@ -27,7 +52,7 @@ void Node<T>::walk() {
 }
 
 template <typename T>
-Node<T> *Node<T>::search(int key) {
+node<T> *node<T>::search(int key) {
     int i = 0;
     while (i < key_numbers && key > keys[i])
         i++;
@@ -36,13 +61,13 @@ Node<T> *Node<T>::search(int key) {
         return this;
 
     if (leaf == true)
-        return NULL;
+        return nullptr;
 
     return child[i]->search(key);
 }
 
 template <typename T>
-void Node<T>::insertNotFull(int key) {
+void node<T>::insert_not_full(int key) {
     int i = key_numbers - 1;
 
     if (leaf == true) {
@@ -62,13 +87,13 @@ void Node<T>::insertNotFull(int key) {
             if (keys[i + 1] < key)
                 i++;
         }
-        child[i + 1]->insertNotFull(key);
+        child[i + 1]->insert_not_full(key);
     }
 }
 
 template <typename T>
-void Node<T>::split(Node *node, int index) {
-    Node<T> *node1 = new Node(node->degree, node->leaf);
+void node<T>::split(node *node, int index) {
+    node<T> *node1 = new node(node->degree, node->leaf);
     node1->key_numbers = degree - 1;
 
     for (int j = 0; j < degree - 1; j++)
@@ -94,7 +119,7 @@ void Node<T>::split(Node *node, int index) {
 }
 
 template <typename T>
-int Node<T>::searchKey(int key) {
+int node<T>::search_key(int key) {
     int i = 0;
     for (i = 0; i < key_numbers && keys[i] < key; ++i)
         ;
@@ -102,8 +127,8 @@ int Node<T>::searchKey(int key) {
 }
 
 template <typename T>
-int Node<T>::getPredecessor(int i) {
-    Node<T> *node = child[i];
+int node<T>::get_predecessor(int i) {
+    node<T> *node = child[i];
     while (!node->leaf)
         node = node->child[node->key_numbers];
 
@@ -111,8 +136,8 @@ int Node<T>::getPredecessor(int i) {
 }
 
 template <typename T>
-int Node<T>::getSuccessor(int i) {
-    Node<T> *node = child[i + 1];
+int node<T>::get_successor(int i) {
+    node<T> *node = child[i + 1];
     while (!node->leaf)
         node = node->child[0];
 
@@ -120,12 +145,12 @@ int Node<T>::getSuccessor(int i) {
 }
 
 template <typename T>
-void Node<T>::fillChild(int i) {
+void node<T>::fill_child(int i) {
     if (i != key_numbers && child[i + 1]->key_numbers >= degree)
-        borrowKeyBefore(i);
+        borrow_key_before(i);
 
     else if (i != 0 && child[i - 1]->key_numbers >= degree)
-        borrowKeyAfter(i);
+        borrow_key_after(i);
 
     else {
         if (i != key_numbers)
@@ -136,9 +161,9 @@ void Node<T>::fillChild(int i) {
 }
 
 template <typename T>
-void Node<T>::borrowKeyBefore(int i) {
-    Node<T> *c = child[i];
-    Node<T> *sib = child[i - 1];
+void node<T>::borrow_key_before(int i) {
+    node<T> *c = child[i];
+    node<T> *sib = child[i - 1];
 
     for (int j = c->key_numbers - 1; j >= 0; --j)
         c->keys[j + 1] = c->keys[j];
@@ -160,9 +185,9 @@ void Node<T>::borrowKeyBefore(int i) {
 }
 
 template <typename T>
-void Node<T>::borrowKeyAfter(int i) {
-    Node<T> *c = child[i];
-    Node<T> *sib = child[i + 1];
+void node<T>::borrow_key_after(int i) {
+    node<T> *c = child[i];
+    node<T> *sib = child[i + 1];
 
     c->keys[(c->key_numbers)] = keys[i];
 
@@ -185,9 +210,9 @@ void Node<T>::borrowKeyAfter(int i) {
 }
 
 template <typename T>
-void Node<T>::merge(int i) {
-    Node<T> *c = child[i];
-    Node<T> *sib = child[i + 1];
+void node<T>::merge(int i) {
+    node<T> *c = child[i];
+    node<T> *sib = child[i + 1];
 
     c->keys[degree - 1] = keys[i];
 
@@ -212,13 +237,13 @@ void Node<T>::merge(int i) {
 }
 
 template <typename T>
-void Node<T>::remove(int key) {
-    int i = searchKey(key);
+void node<T>::remove(int key) {
+    int i = search_key(key);
     if (i < key_numbers && keys[i] == key) {
         if (!leaf)
-            removeNotLeaf(i);
+            remove_not_leaf(i);
         else
-            removeLeaf(i);
+            remove_leaf(i);
     } else {
         if (leaf)
             return;
@@ -226,7 +251,7 @@ void Node<T>::remove(int key) {
         bool isPresent = ((i == key_numbers) ? true : false);
 
         if (child[i]->key_numbers < degree)
-            fillChild(i);
+            fill_child(i);
 
         if (isPresent && i > key_numbers)
             child[i - 1]->remove(key);
@@ -237,7 +262,7 @@ void Node<T>::remove(int key) {
 }
 
 template <typename T>
-void Node<T>::removeLeaf(int i) {
+void node<T>::remove_leaf(int i) {
     for (int j = i + 1; j < key_numbers; ++j)
         keys[j - 1] = keys[j];
 
@@ -245,15 +270,15 @@ void Node<T>::removeLeaf(int i) {
 }
 
 template <typename T>
-void Node<T>::removeNotLeaf(int i) {
+void node<T>::remove_not_leaf(int i) {
     int key = keys[i];
 
     if (child[i]->key_numbers >= degree) {
-        int aux = getPredecessor(i);
+        int aux = get_predecessor(i);
         keys[i] = aux;
         child[i]->remove(aux);
     } else if (child[i + 1]->key_numbers >= degree) {
-        int aux = getSuccessor(i);
+        int aux = get_successor(i);
         keys[i] = aux;
         child[i + 1]->remove(aux);
     } else {
@@ -261,3 +286,5 @@ void Node<T>::removeNotLeaf(int i) {
         child[i]->remove(key);
     }
 }
+
+#endif // BTREE_NODE_H
