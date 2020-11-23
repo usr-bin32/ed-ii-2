@@ -32,7 +32,10 @@ void test_hashing() {
 
     for (auto &b : books) {
         for (int id : b.author_ids) {
-            // authors.insert(id)->occurrences += 1
+            // author default;
+            // author *a = authors.insert(id, default);
+            // if (a.name.empty()) a.name = all_books.search(id)->name;
+            // a->occurrences += 1;
         }
     }
 
