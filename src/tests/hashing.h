@@ -23,6 +23,15 @@ void read_books(std::vector<book> &books) {
         book b;
 
         parser.get(0, b.authors);
+        parser.get(1, b.bestsellers_rank);
+        parser.get(2, b.categories);
+        parser.get(3, b.edition);
+        parser.get(4, b.id);
+        parser.get(5, b.isbn10);
+        parser.get(6, b.isbn13);
+        parser.get(7, b.rating);
+        parser.get(8, b.rating_count);
+        parser.get(9, b.title);
 
         books.push_back(std::move(b));
     }
@@ -48,21 +57,20 @@ void read_authors(std::vector<std::pair<int, std::string>> &authors) {
 }
 
 void shuffle(std::vector<book> &books) {
-  /*  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::shuffle(books.begin(), books.end(), std::default_random_engine(seed));*/
-
-     std::srand(unsigned ( std::time(0)));
-     std::random_shuffle ( books.begin(), books.end() );
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::shuffle(books.begin(), books.end(), std::default_random_engine(seed));
 }
 
 void test_hashing() {
     int n;
     std::cout << "Insira o quantos livros devem ser lidos: ";
     std::cin >> n;
-    
+
     int m;
-    std::cout << "Insira quantos autores deseja imprimir: ";
-    std::cin >> m;
+    do{
+        std::cout << "Insira quantos autores deseja imprimir: ";
+        std::cin >> m;
+    }while(m>n);
 
     int tam_books = (n + n*0.20), tam_authors = (n + n*0.35), tam_all_authors; 
 
@@ -71,7 +79,6 @@ void test_hashing() {
     tam_all_authors = all_authors.size() + all_authors.size()*0.20;
 
     hash_table<std::string> author_names(tam_all_authors);
-
 
     hash_table<book> hash_books(tam_books);
     hash_table<author> hash_authors(tam_authors);
@@ -101,7 +108,6 @@ void test_hashing() {
     }
 // armazena os autores em hash table
     for (auto &a : all_authors) {
-
         author_names.insert(a.first, a.second);
     }
 
@@ -109,11 +115,14 @@ void test_hashing() {
     hash_authors.to_vector(author_vec);
     quick_sort(author_vec.data(), author_vec.size());
 
-    for (int i = 0; i < m; i++) {
+    for (int i = 0; i < m && i < author_vec.size(); i++) {
+        if (author_names.search(author_vec[i].id) == nullptr) {
+            m++;
+            continue;
+        }
 
-        std::cout << *author_names.search(author_vec[i].id) << ": " <<
-        author_vec[i].occurrences
-                  << std::endl;
+        std::cout << *author_names.search(author_vec[i].id) << ": "
+                  << author_vec[i].occurrences << std::endl;
     }
 }
 
