@@ -11,8 +11,6 @@
 #include "../structures/author.h"
 #include "../structures/book.h"
 
-// Aqui, ao invés de ler para um vector, ler direto para uma hash_table de
-// autores
 void read_books(std::vector<book> &books) {
     csv_parser parser("./res/books.csv");
 
@@ -25,10 +23,6 @@ void read_books(std::vector<book> &books) {
         book b;
 
         parser.get(0, b.authors);
-
-        // já incrementar na tabela de autores logo aqui
-        // cuidado com os autores inexistentes. Você deve lidar com eles aqui
-
         parser.get(1, b.bestsellers_rank);
         parser.get(2, b.categories);
         parser.get(3, b.edition);
@@ -83,7 +77,7 @@ void test_hashing() {
 
     // ler todos os autores do CSV para uma hash_table<author>
     // a struct, que está na master, tem o seguinte formato:
-    // { int id; std::string name; int occurrences = 0; }
+    // { std::string name; int occurrences = 0; }
 
     std::vector<std::pair<int, std::string>> all_authors;
     read_authors(all_authors);
