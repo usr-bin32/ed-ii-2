@@ -61,10 +61,10 @@ class hash_table {
         return count;
     }
 
-    void to_vector(std::vector<T> &vector) {
-        for (auto const &record : this->table) {
+    void to_vector(std::vector<T> &vetor) {
+        for (auto &record : this->table) {
             if (!record.empty()) {
-                vector.push_back(this->table);
+                vetor.push_back(record.data);
             }
         }
     }
