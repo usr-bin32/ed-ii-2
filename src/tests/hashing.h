@@ -28,26 +28,9 @@ void read_books(std::vector<book> &books) {
     }
 }
 
-int count_authors() {
+
+void read_authors(std::vector<record<std::string>> &authors) {
     csv_parser parser("./res/authors.csv");
-    int count = 0;
-
-    if (!parser.is_open()) {
-        std::cerr << "Failed to open `authors.csv`!" << std::endl;
-        return 0;
-    }
-
-    while (parser.read_line()) {
-        count += 1;
-    }
-
-    return count;
-}
-
-void read_authors(hash_table<std::string> &authors) {
-    csv_parser parser("./res/authors.csv");
-    int id;
-    std::string name;
 
     if (!parser.is_open()) {
         std::cerr << "Failed to open `authors.csv`!" << std::endl;
@@ -55,9 +38,10 @@ void read_authors(hash_table<std::string> &authors) {
     }
 
     while (parser.read_line()) {
-        parser.get(0, id);
-        parser.get(1, name);
-        authors.insert(id, name);
+        record<std::string> a;
+        parser.get(0, a.key);
+        parser.get(1, a.data);
+        authors.push_back(std::move(a));
     }
 }
 
@@ -75,12 +59,12 @@ void test_hashing() {
     std::cout << "Insira quantos autores deseja imprimir: ";
     std::cin >> m;
 
-    int tam_books = (n + n*0.20), tam_authors = (n + n*0.35), tam_all_authors = count_authors(); 
-    tam_all_authors += tam_all_authors*0.20; 
+    int tam_books = (n + n*0.20), tam_authors = (n + n*0.35), tam_all_authors; 
 
+    std::vector<record<std::string>> all_authors;
+    read_authors(all_authors);
+    tam_all_authors = all_authors.size() + all_authors.size()*0.20;
     hash_table<std::string> author_names(tam_all_authors);
-    read_authors(author_names);
-
     hash_table<book> hash_books(tam_books);
     hash_table<author> hash_authors(tam_authors);
     std::vector<book> books;
@@ -107,6 +91,12 @@ void test_hashing() {
                 hash_authors.insert(id, a);
             }
         }
+    }
+// armazena os autores em hash table
+    for (auto &a : all_authors) {
+
+        author_names.insert(a.key, a.data);
+       
     }
 
     std::vector<author> author_vec;
