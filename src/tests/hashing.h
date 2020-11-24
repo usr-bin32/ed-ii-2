@@ -28,8 +28,7 @@ void read_books(std::vector<book> &books) {
     }
 }
 
-
-void read_authors(std::vector<record<std::string>> &authors) {
+void read_authors(std::vector<std::pair<int, std::string>> &authors) {
     csv_parser parser("./res/authors.csv");
 
     if (!parser.is_open()) {
@@ -38,16 +37,22 @@ void read_authors(std::vector<record<std::string>> &authors) {
     }
 
     while (parser.read_line()) {
-        record<std::string> a;
-        parser.get(0, a.key);
-        parser.get(1, a.data);
-        authors.push_back(std::move(a));
+
+        int id;
+        std::string name;
+        parser.get(0, id);
+        parser.get(1, name);
+
+        authors.push_back( std::make_pair(id, name));
     }
 }
 
 void shuffle(std::vector<book> &books) {
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::shuffle(books.begin(), books.end(), std::default_random_engine(seed));
+  /*  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::shuffle(books.begin(), books.end(), std::default_random_engine(seed));*/
+
+     std::srand(unsigned ( std::time(0)));
+     std::random_shuffle ( books.begin(), books.end() );
 }
 
 void test_hashing() {
@@ -61,20 +66,22 @@ void test_hashing() {
 
     int tam_books = (n + n*0.20), tam_authors = (n + n*0.35), tam_all_authors; 
 
-    std::vector<record<std::string>> all_authors;
+    std::vector<std::pair<int, std::string>> all_authors;
     read_authors(all_authors);
     tam_all_authors = all_authors.size() + all_authors.size()*0.20;
+
     hash_table<std::string> author_names(tam_all_authors);
+
+
     hash_table<book> hash_books(tam_books);
     hash_table<author> hash_authors(tam_authors);
     std::vector<book> books;
     read_books(books); 
- //   shuffle(books);
+    shuffle(books);
     books.resize(n);
 
     // armazenando os livros lidos em uma hash table
     // criando uma nova hash_table com key = id e value = author { id,  contagem }
-
     for (auto &b : books) {
 
         hash_books.insert(b.id, b);
@@ -95,8 +102,7 @@ void test_hashing() {
 // armazena os autores em hash table
     for (auto &a : all_authors) {
 
-        author_names.insert(a.key, a.data);
-       
+        author_names.insert(a.first, a.second);
     }
 
     std::vector<author> author_vec;
