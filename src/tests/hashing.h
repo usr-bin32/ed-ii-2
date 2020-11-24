@@ -106,7 +106,7 @@ void test_hashing() {
             }
         }
     }
-// armazena os autores em hash table
+    // armazena os autores em hash table
     for (auto &a : all_authors) {
         author_names.insert(a.first, a.second);
     }
