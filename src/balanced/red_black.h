@@ -1,6 +1,9 @@
 #ifndef RED_BLACK_H
 #define RED_BLACK_H
 
+#include <algorithm>
+#include <bits/stdc++.h>
+
 #include "red_black_node.h"
 
 template <typename T>
@@ -30,12 +33,12 @@ rbnode<T> *aux_insert(rbnode<T> *root, rbnode<T> *pt, int &comparisons) {
     /* Caso contrário, volte para baixo na árvore */
     comparisons++;
     if (pt->key < root->key) {
-        root->left = aux_insert(root->left, pt);
+        root->left = aux_insert(root->left, pt, comparisons);
         root->left->parent = root;
     } else {
         comparisons++;
         if (pt->key > root->key) {
-            root->right = aux_insert(root->right, pt);
+            root->right = aux_insert(root->right, pt, comparisons);
             root->right->parent = root;
         }
     }
@@ -58,13 +61,13 @@ template <typename T>
 T aux_search(rbnode<T> *aux, int key, int &comparisons) {
     comparisons++;
     if (aux->key > key) {
-        return aux_search(aux->left, key);
+        return aux_search(aux->left, key, comparisons);
     } else {
         comparisons++;
         if (aux->key < key) {
-            return aux_search(aux->right, key);
+            return aux_search(aux->right, key, comparisons);
         } else {
-            return aux;
+            return aux->data;
         }
     }
 }
@@ -158,7 +161,7 @@ void red_black_tree<T>::fix_violation(rbnode<T> *&root, rbnode<T> *&pt) {
                    pt é filho esquerdo de seu pai. Rotação à direita necessária
                 */
                 rotate_right(root, grand_parent_pt);
-                swap(parent_pt->color, grand_parent_pt->color);
+                std::swap(parent_pt->color, grand_parent_pt->color);
                 pt = parent_pt;
             }
         }
@@ -192,7 +195,7 @@ void red_black_tree<T>::fix_violation(rbnode<T> *&root, rbnode<T> *&pt) {
                 necessária
                 */
                 rotate_left(root, grand_parent_pt);
-                swap(parent_pt->color, grand_parent_pt->color);
+                std::swap(parent_pt->color, grand_parent_pt->color);
                 pt = parent_pt;
             }
         }
