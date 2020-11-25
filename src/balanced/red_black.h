@@ -82,14 +82,16 @@ T *red_black_tree<T>::search(long key, int &comparisons) {
 
 template <typename T>
 T *aux_search(rbnode<T> *node, long key, int &comparisons) {
-    comparisons++;
-    if (node->key == key) {
-        return &node->value;
-    } else {
-        if (node->key > key) {
-            return aux_search(node->left, key, comparisons);
+    if (node != nullptr) {
+        comparisons++;
+        if (node->key == key) {
+            return &node->value;
         } else {
-            return aux_search(node->right, key, comparisons);
+            if (node->key > key) {
+                return aux_search(node->left, key, comparisons);
+            } else {
+                return aux_search(node->right, key, comparisons);
+            }
         }
     }
     return nullptr;
