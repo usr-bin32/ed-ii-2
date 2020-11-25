@@ -17,9 +17,9 @@ void read_input(std::vector<int> &input_sizes);
 void generate_keys(std::vector<long> &keys);
 
 void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
-                    std::ofstream &search_out);
+                    std::ofstream &search_out, float random_frac);
 void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
-                std::ofstream &search_out, int degree);
+                std::ofstream &search_out, float random_frac, int degree);
 
 void test_balanced() {
     std::vector<int> input_sizes;
@@ -31,13 +31,15 @@ void test_balanced() {
     }
 
     // WIP
-    // float fraction = 0.0f;
+    // float random_frac = 0.0f;
     // do {
     //     std::cout << "Insira a fração das chaves buscadas que será aleatória
     //     "
     //                  "(0 a 1): ";
-    //     std::cin >> fraction;
-    // } while (fraction < 0 || fraction > 1);
+    //     std::cin >> random_frac;
+    // } while (random_frac < 0 || random_frac > 1);
+
+    float random_frac = 0.0f;
 
     // std::cout << std::endl;
 
@@ -52,9 +54,9 @@ void test_balanced() {
         insert_out << "N = " << n << std::endl;
         search_out << "N = " << n << std::endl;
 
-        test_red_black(books, n, insert_out, search_out);
-        test_btree(books, n, insert_out, search_out, 2);
-        test_btree(books, n, insert_out, search_out, 20);
+        test_red_black(books, n, insert_out, search_out, random_frac);
+        test_btree(books, n, insert_out, search_out, random_frac, 2);
+        test_btree(books, n, insert_out, search_out, random_frac, 20);
 
         std::cout << std::endl;
         insert_out << std::endl;
@@ -86,7 +88,7 @@ void read_input(std::vector<int> &input_sizes) {
 }
 
 void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
-                    std::ofstream &search_out) {
+                    std::ofstream &search_out, float random_frac) {
     int insertion_cmp = 0;
     double insertion_time = 0;
 
@@ -108,9 +110,19 @@ void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
         insertion_time += t1 - t0;
 
         t0 = double(clock()) / CLOCKS_PER_SEC;
-        for (int i = 0; i < n; i++) {
+
+        // busca com chaves aleatórias
+        std::vector<long> random_keys(n * random_frac);
+        generate_keys(random_keys);
+        for (auto key : random_keys) {
+            tree.search(key, search_cmp);
+        }
+
+        // busca com chaves presentes
+        for (int i = 0; i < static_cast<int>(n * (1 - random_frac)); i++) {
             tree.search(books[i].id, search_cmp);
         }
+
         t1 = double(clock()) / CLOCKS_PER_SEC;
         search_time += t1 - t0;
     }
@@ -136,7 +148,7 @@ void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
 }
 
 void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
-                std::ofstream &search_out, int degree) {
+                std::ofstream &search_out, float random_frac, int degree) {
     int insertion_cmp = 0;
     double insertion_time = 0;
 
@@ -158,9 +170,19 @@ void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
         insertion_time += t1 - t0;
 
         t0 = double(clock()) / CLOCKS_PER_SEC;
-        for (int i = 0; i < n; i++) {
+
+        // busca com chaves aleatórias
+        std::vector<long> random_keys(n * random_frac);
+        generate_keys(random_keys);
+        for (auto key : random_keys) {
+            tree.search(key, search_cmp);
+        }
+
+        // busca com chaves presentes
+        for (int i = 0; i < static_cast<int>(n * (1 - random_frac)); i++) {
             tree.search(books[i].id, search_cmp);
         }
+
         t1 = double(clock()) / CLOCKS_PER_SEC;
         search_time += t1 - t0;
     }
