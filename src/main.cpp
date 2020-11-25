@@ -2,15 +2,16 @@
 #include "balanced/btree.h"
 #include "hashing/hash_table.h"
 #include "balanced/red_black.h"
+#include "tests/balanced.h"
 #include <string>
 #include <iostream>
 
-int main() {
+int main()
+{
     // hash_table<std::string> table(100);
     // red_black_tree<std::string> teste;
     // int contagem1 = 0;
     // int contagem2 = 0;
-
     // teste.insert("Felipepe", 1, contagem1);
     // std::cout << "1" << std::endl;
     // teste.insert("Julia", 2, contagem1);
@@ -43,13 +44,11 @@ int main() {
     // std::cout << "15" << std::endl;
     // teste.insert("dança das cadeiras", 17, contagem1);
     // std::cout << "16" << std::endl;
-
-
     // teste.imprime();
-
     // std::cout << teste.search(9, contagem2) <<" TESTE - BUSCA KEY: 9 | DATA: ED" << std::endl;
     // std::string s = "s";
     // table.insert(5, std::move(s));
     // table.insert(3, "Ana");
     // std::cout << *table.search(3) << std::endl;
+    test_balanced();
 }

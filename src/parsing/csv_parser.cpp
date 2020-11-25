@@ -67,9 +67,17 @@ bool csv_parser::read_buffer_line() {
                 size_t length = i - j;
 
                 // remove as aspas externas do conteúdo da coluna
-                if (i > 0 && (this->buffer[i - 1]) == '"') {
-                    position += 1;
-                    length -= 2;
+                if (i > 0) {
+                    // caso as linhas sejam terminadas com CRLF (Windows)
+                    if (this->buffer[i - 1] == '\r') {
+                        if (this->buffer[i - 2] == '"') {
+                            position += 1;
+                            length -= 3;
+                        }
+                    } else if (this->buffer[i - 1] == '"') {
+                        position += 1;
+                        length -= 2;
+                    }
                 }
 
                 this->columns.push_back({position, length});
