@@ -13,10 +13,10 @@ class red_black_tree {
     red_black_tree() { root = nullptr; };
     ~red_black_tree() { destroy(root); }
 
-    void insert(int key, T data, int &comparisons);
-    T *search(int key, int &comparisons);
+    void insert(long key, T data, int &comparisons);
+    T *search(long key, int &comparisons);
     void print();
-    void aux_print(rbnode<T> *&, int key);
+    void aux_print(rbnode<T> *&, long key);
 
   private:
     rbnode<T> *root;
@@ -61,7 +61,7 @@ void red_black_tree<T>::print() {
 }
 
 template <typename T>
-void red_black_tree<T>::aux_print(rbnode<T> *&p, int key) {
+void red_black_tree<T>::aux_print(rbnode<T> *&p, long key) {
     if (p != nullptr) {
         aux_print(p->right, key + 1);
         for (int i = 0; i < key; i++)
@@ -72,7 +72,7 @@ void red_black_tree<T>::aux_print(rbnode<T> *&p, int key) {
 }
 
 template <typename T>
-T *red_black_tree<T>::search(int key, int &comparisons) {
+T *red_black_tree<T>::search(long key, int &comparisons) {
     if (this->root->key == key) {
         return &root->data;
     } else {
@@ -81,7 +81,7 @@ T *red_black_tree<T>::search(int key, int &comparisons) {
 }
 
 template <typename T>
-T *aux_search(rbnode<T> *node, int key, int &comparisons) {
+T *aux_search(rbnode<T> *node, long key, int &comparisons) {
     comparisons++;
     if (node->key == key) {
         return &node->data;
@@ -234,7 +234,7 @@ void red_black_tree<T>::fix_violation(rbnode<T> *&node, rbnode<T> *&pt) {
 
 // insere um novo valor na arvore
 template <typename T>
-void red_black_tree<T>::insert(int key, T data, int &comparisons) {
+void red_black_tree<T>::insert(long key, T data, int &comparisons) {
     rbnode<T> *pt = new rbnode<T>(data, key);
 
     // insere o nó
