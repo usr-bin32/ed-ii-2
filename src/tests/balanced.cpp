@@ -31,18 +31,14 @@ void test_balanced() {
         return;
     }
 
-    // WIP
-    // float random_frac = 0.0f;
-    // do {
-    //     std::cout << "Insira a fração das chaves buscadas que será aleatória
-    //     "
-    //                  "(0 a 1): ";
-    //     std::cin >> random_frac;
-    // } while (random_frac < 0 || random_frac > 1);
-
     float random_frac = 0.0f;
+    do {
+        std::cout << "Insira a fração das chaves buscadas que será aleatória "
+                     "(0 a 1): ";
+        std::cin >> random_frac;
+    } while (random_frac < 0 || random_frac > 1);
 
-    // std::cout << std::endl;
+    std::cout << std::endl;
 
     std::vector<book> books;
     read_books(books);
@@ -164,7 +160,7 @@ void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
 
         btree<book *> tree(degree);
 
-        std::vector<int> indices(n - n * random_frac);
+        std::vector<int> indices(n);
         generate_indices(indices, books.size());
 
         // inserção
