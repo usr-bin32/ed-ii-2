@@ -82,9 +82,9 @@ void bnode<T>::walk() {
 template <typename T>
 void bnode<T>::insert_not_full(long key, T data, int &comparisons) {
     int i = key_numbers - 1;
-    comparisons++;
 
     if (leaf == true) {
+	comparisons++;
         while (i >= 0 && keys[i] > key) {
             keys[i + 1] = keys[i];
             datas[i + 1] = datas[i];
@@ -97,6 +97,7 @@ void bnode<T>::insert_not_full(long key, T data, int &comparisons) {
     }
 
     else {
+	comparisons++;
         while (i >= 0 && keys[i] > key){
             i--;
 	    comparisons++;
@@ -104,7 +105,10 @@ void bnode<T>::insert_not_full(long key, T data, int &comparisons) {
         if (child[i + 1]->key_numbers == 2 * degree - 1) {
             split(child[i + 1], i + 1);
             if (keys[i + 1] < key)
-                i++;
+            {    
+		i++;
+		comparisons++;
+	    }
         }
         child[i + 1]->insert_not_full(key, data, comparisons);
     }
