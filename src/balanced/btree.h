@@ -8,7 +8,7 @@ class btree {
   public:
     btree(int degree1);
 
-    bnode<T> *search(int key, int &comparisons);
+    T *search(int key, int &comparisons);
     void insert(int key, T data, int &comparisons);
     void walk();
     void remove(int key);
@@ -25,9 +25,9 @@ btree<T>::btree(int degree1) {
 }
 
 template <typename T>
-T<T> *btree<T>::search(int key, int &comparisons) {
+T *btree<T>::search(int key, int &comparisons) {
     comparisons++;
-    return (root == nullptr) ? nullptr : root->search(key,comparisons);
+    return (root == nullptr) ? nullptr : root->search(key, comparisons);
 };
 
 template <typename T>
@@ -36,10 +36,10 @@ void btree<T>::insert(int key, T data, int &comparisons) {
     if (root == nullptr) {
         root = new bnode<T>(degree, true);
         root->keys[0] = key;
- 	root->datas[0] = data;
+        root->datas[0] = data;
         root->key_numbers = 1;
     } else {
-	comparisons++;
+        comparisons++;
         if (root->key_numbers == 2 * degree - 1) {
             bnode<T> *node = new bnode<T>(degree, false);
             node->child[0] = root;
@@ -48,14 +48,13 @@ void btree<T>::insert(int key, T data, int &comparisons) {
             int i = 0;
             if (node->keys[0] < key)
                 i++;
-            node->child[0]->insert_not_full(key,data,comparisons);
+            node->child[0]->insert_not_full(key, data, comparisons);
 
             root = node;
-        } else
-	{
+        } else {
             comparisons++;
-	    root->insert_not_full(key,data,comparisons);
-	}
+            root->insert_not_full(key, data, comparisons);
+        }
     }
 }
 

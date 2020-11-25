@@ -1,13 +1,12 @@
 /*#include "balanced/red_black.h"
 #include "balanced/btree.h"
-#include "hashing/hash_table.h"
 #include "balanced/red_black.h"
 #include "tests/balanced.h"*/
 #include "tests/hashing.h"
 
-
 #include <string>
 #include <iostream>
+#include <string>
 
 int main()
 {
