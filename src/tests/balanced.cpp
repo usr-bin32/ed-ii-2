@@ -15,6 +15,7 @@ constexpr int NUM_TESTS = 5;
 void read_input(std::vector<int> &input_sizes);
 void read_books(std::vector<book> &books);
 void shuffle(std::vector<book> &books);
+void generate_keys(std::vector<int> &keys);
 
 void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
                     std::ofstream &search_out);
@@ -29,6 +30,13 @@ void test_balanced() {
     if (input_sizes.empty()) {
         return;
     }
+
+    float fraction = 0.0f;
+    do {
+        std::cout << "Insira a fração das chaves buscadas que será aleatória "
+                     "(0 a 1): ";
+        std::cin >> fraction;
+    } while (fraction < 0 || fraction > 1);
 
     std::vector<book> books;
     read_books(books);
@@ -202,6 +210,18 @@ void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
 }
 
 void shuffle(std::vector<book> &books) {
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned int seed =
+        std::chrono::system_clock::now().time_since_epoch().count();
     std::shuffle(books.begin(), books.end(), std::default_random_engine(seed));
+}
+
+void generate_keys(std::vector<int> &keys) {
+    std::uniform_int_distribution<int> distribution(0, 1000);
+    std::default_random_engine generator;
+    generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
+
+    keys.resize(size);
+    std::generate(keys.begin(), keys.end(), [&distribution, &generator]() {
+        return distribution(generator);
+    });
 }
