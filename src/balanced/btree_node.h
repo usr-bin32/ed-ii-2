@@ -9,12 +9,12 @@ class bnode {
     bnode(int degree1, bool leaf1);
     ~bnode();
 
-    int num_children; 
-    bnode **children; //vetor de ponteiro
-    int num_keys; //numero atual de chaves
-    long *keys; //array de chaves
+    int num_children;
+    bnode **children; // vetor de ponteiro
+    int num_keys;     // numero atual de chaves
+    long *keys;       // array de chaves
     T *values;
-    bool leaf; //verdadeiro quando o nó é folha e falso quando não é
+    bool leaf; // verdadeiro quando o nó é folha e falso quando não é
 
     int get_key(bnode *node, int index) { return node->keys[index]; };
 
@@ -41,7 +41,7 @@ class bnode {
 
 template <typename T>
 bnode<T>::bnode(int degree1, bool leaf1) {
-    degree = degree1; 
+    degree = degree1;
     leaf = leaf1;
 
     num_keys = 0;
@@ -62,9 +62,9 @@ bnode<T>::~bnode() {
     delete[] children;
 }
 
-//pesquisa a chave key em uma subárvore enraizada no nó
+// pesquisa a chave key em uma subárvore enraizada no nó
 template <typename T>
-T *bnode<T>::search(long key, int &comparisons) { 
+T *bnode<T>::search(long key, int &comparisons) {
     int i = 0;
 
     comparisons++;
@@ -83,8 +83,7 @@ T *bnode<T>::search(long key, int &comparisons) {
     return children[i]->search(key, comparisons);
 }
 
-
-//Função para percorrer todos os nós em uma subárvore enraizada com este nó
+// Função para percorrer todos os nós em uma subárvore enraizada com este nó
 template <typename T>
 void bnode<T>::walk() {
     int i;
@@ -96,8 +95,7 @@ void bnode<T>::walk() {
         children[i]->walk();
 }
 
-
-//Insere uma nova chave nesse nó quando o nó ainda não está cheio
+// Insere uma nova chave nesse nó quando o nó ainda não está cheio
 template <typename T>
 void bnode<T>::insert_not_full(long key, T value, int &comparisons) {
     int i = num_keys - 1;
@@ -133,8 +131,7 @@ void bnode<T>::insert_not_full(long key, T value, int &comparisons) {
     }
 }
 
-
-//Função para dividir o filho do nó quando ele está cheio
+// Função para dividir o filho do nó quando ele está cheio
 template <typename T>
 void bnode<T>::split(bnode *node, int index) {
     bnode<T> *node1 = new bnode(node->degree, node->leaf);
@@ -170,7 +167,7 @@ void bnode<T>::split(bnode *node, int index) {
     num_keys = num_keys + 1;
 }
 
-//Retorna 
+// Retorna
 template <typename T>
 int bnode<T>::search_key(long key) {
     int i = 0;
@@ -179,7 +176,7 @@ int bnode<T>::search_key(long key) {
     return i;
 }
 
-//Obtêm o predecessor de keys[i]
+// Obtêm o predecessor de keys[i]
 template <typename T>
 long bnode<T>::get_predecessor(int i) {
     bnode<T> *node = children[i];
@@ -189,7 +186,7 @@ long bnode<T>::get_predecessor(int i) {
     return node->keys[node->num_keys - 1];
 }
 
-//Obtêm o sucessor de keys[i]
+// Obtêm o sucessor de keys[i]
 template <typename T>
 long bnode<T>::get_successor(int i) {
     bnode<T> *node = children[i + 1];
@@ -199,7 +196,7 @@ long bnode<T>::get_successor(int i) {
     return node->keys[0];
 }
 
-//Preenche o children[i] que tem menos que degree-1 chaves
+// Preenche o children[i] que tem menos que degree-1 chaves
 template <typename T>
 void bnode<T>::fill_child(int i) {
     if (i != num_keys && children[i + 1]->num_keys >= degree)
@@ -216,7 +213,7 @@ void bnode<T>::fill_child(int i) {
     }
 }
 
-//Pega emprestado uma chave de children[i -1] e inserir em children[i]
+// Pega emprestado uma chave de children[i -1] e inserir em children[i]
 template <typename T>
 void bnode<T>::borrow_key_before(int i) {
     bnode<T> *c = children[i];
@@ -245,7 +242,7 @@ void bnode<T>::borrow_key_before(int i) {
     c->num_keys = c->num_keys + 1;
 }
 
-//Pega emprestado uma chave children[i +1] e coloca em children[i]
+// Pega emprestado uma chave children[i +1] e coloca em children[i]
 template <typename T>
 void bnode<T>::borrow_key_after(int i) {
     bnode<T> *c = children[i];
@@ -275,7 +272,7 @@ void bnode<T>::borrow_key_after(int i) {
     c->num_keys = c->num_keys + 1;
 }
 
-//Uma função para mesclar o children[i] com children[i + 1]
+// Uma função para mesclar o children[i] com children[i + 1]
 template <typename T>
 void bnode<T>::merge(int i) {
     bnode<T> *c = children[i];
@@ -309,7 +306,7 @@ void bnode<T>::merge(int i) {
     children[i + 1] = nullptr;
 }
 
-//Remove a chave key da subárvore enraizada com este nó
+// Remove a chave key da subárvore enraizada com este nó
 template <typename T>
 void bnode<T>::remove(long key) {
     int i = search_key(key);
@@ -335,7 +332,7 @@ void bnode<T>::remove(long key) {
     }
 }
 
-//Remove a chave i deste nó, que é uma folha
+// Remove a chave i deste nó, que é uma folha
 template <typename T>
 void bnode<T>::remove_leaf(int i) {
     for (int j = i + 1; j < num_keys; ++j) {
@@ -346,7 +343,7 @@ void bnode<T>::remove_leaf(int i) {
     num_keys--;
 }
 
-//Remove a chave i deste nó, que é um nó não folha
+// Remove a chave i deste nó, que é um nó não folha
 template <typename T>
 void bnode<T>::remove_not_leaf(int i) {
     long key = keys[i];

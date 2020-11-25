@@ -15,33 +15,33 @@ class btree {
     void remove(long key);
 
   private:
-    int degree; //grau da árvore
-    bnode<T> *root; //raiz da árvore
+    int degree;     // grau da árvore
+    bnode<T> *root; // raiz da árvore
 
     void destroy(bnode<T> *node);
 };
 
-//Construtor
+// Construtor
 template <typename T>
 btree<T>::btree(int degree1) {
     degree = degree1;
     root = nullptr;
 }
 
-//Destrutor
+// Destrutor
 template <typename T>
 btree<T>::~btree() {
     destroy(this->root);
 }
 
-//Pesquisa uma chave na árvore
+// Pesquisa uma chave na árvore
 template <typename T>
 T *btree<T>::search(long key, int &comparisons) {
     comparisons++;
     return (root == nullptr) ? nullptr : root->search(key, comparisons);
 };
 
-//Função principal para inserir uma nova chave na árvore
+// Função principal para inserir uma nova chave na árvore
 template <typename T>
 void btree<T>::insert(long key, T value, int &comparisons) {
     comparisons++;
@@ -70,14 +70,14 @@ void btree<T>::insert(long key, T value, int &comparisons) {
     }
 }
 
-//Percorre todos os nós de uma subárvore enraizada neste nó
+// Percorre todos os nós de uma subárvore enraizada neste nó
 template <typename T>
 void btree<T>::walk() {
     if (root != nullptr)
         root->walk();
 }
 
-//Função principal para remover uma chave da árvore
+// Função principal para remover uma chave da árvore
 template <typename T>
 void btree<T>::remove(long key) {
     root->remove(key);
