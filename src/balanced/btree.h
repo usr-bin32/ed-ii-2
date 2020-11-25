@@ -7,6 +7,7 @@ template <typename T>
 class btree {
   public:
     btree(int degree1);
+    ~btree();
 
     T *search(int key, int &comparisons);
     void insert(int key, T data, int &comparisons);
@@ -22,6 +23,11 @@ template <typename T>
 btree<T>::btree(int degree1) {
     degree = degree1;
     root = nullptr;
+}
+
+template <typename T>
+btree<T>::~btree() {
+    //...
 }
 
 template <typename T>
@@ -48,7 +54,7 @@ void btree<T>::insert(int key, T data, int &comparisons) {
             int i = 0;
             if (node->keys[0] < key)
                 i++;
-            node->child[0]->insert_not_full(key, data, comparisons);
+            node->child[i]->insert_not_full(key, data, comparisons);
 
             root = node;
         } else {
