@@ -14,8 +14,8 @@ class bnode {
     int key_numbers;
     T *datas;
 
-    bnode *search(int key);
-    void insert_not_full(int key);
+    bnode *search(int key, int &comparisons);
+    void insert_not_full(int key, int &comparisons);
     void walk();
     void split(bnode *node, int index);
     void remove(int key);
@@ -23,7 +23,7 @@ class bnode {
   private:
     int degree;
 
-    int search_key(int key);
+    int search_key(int key, int &comparisons);
     void remove_leaf(int i);
     void remove_not_leaf(int i);
     int get_predecessor(int i);
@@ -59,23 +59,26 @@ void bnode<T>::walk() {
 }
 
 template <typename T>
-bnode<T> *bnode<T>::search(int key) {
+T<T> *bnode<T>::search(int key, int &comparisons) {
     int i = 0;
+    comparisons = comparisons + 2;
     while (i < key_numbers && key > keys[i])
         i++;
-
+    
+    comparisons++;
     if (keys[i] == key)
-        return this;
+        return data[i];
 
     if (leaf == true)
         return nullptr;
 
-    return child[i]->search(key);
+    return child[i]->search(key,comparisons);
 }
 
 template <typename T>
-void bnode<T>::insert_not_full(int key, T data) {
+void bnode<T>::insert_not_full(int key, T data, int &comparisons) {
     int i = key_numbers - 1;
+    comparisons++;
 
     if (leaf == true) {
         while (i >= 0 && keys[i] > key) {
@@ -89,6 +92,7 @@ void bnode<T>::insert_not_full(int key, T data) {
     }
 
     else {
+	comparisons++;
         while (i >= 0 && keys[i] > key)
             i--;
         if (child[i + 1]->key_numbers == 2 * degree - 1) {
@@ -96,7 +100,7 @@ void bnode<T>::insert_not_full(int key, T data) {
             if (keys[i + 1] < key)
                 i++;
         }
-        child[i + 1]->insert_not_full(key, data);
+        child[i + 1]->insert_not_full(key, data, comparisons);
     }
 }
 
@@ -132,8 +136,9 @@ void bnode<T>::split(bnode *node, int index) {
 }
 
 template <typename T>
-int bnode<T>::search_key(int key) {
+int bnode<T>::search_key(int key, int &comparisons) {
     int i = 0;
+    comparisons++;
     for (i = 0; i < key_numbers && keys[i] < key; ++i);
     return i;
 }
