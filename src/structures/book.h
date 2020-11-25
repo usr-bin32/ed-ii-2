@@ -9,7 +9,7 @@ struct book {
     int bestsellers_rank;
     std::vector<int> categories;
     std::string edition;
-    int id;
+    long id;
     std::string isbn10;
     std::string isbn13;
     float rating;

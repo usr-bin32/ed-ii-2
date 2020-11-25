@@ -5,33 +5,27 @@ constexpr int EMPTY_RECORD_KEY = -1;
 
 template <typename T>
 struct record {
-    record() {
-        this->key = EMPTY_RECORD_KEY;
-    }
+    record() { this->key = EMPTY_RECORD_KEY; }
 
-    record(int key, T const &data) {
+    record(long key, T const &data) {
         this->key = key;
         this->data = data;
     }
 
-    bool empty() {
-        return this->key == EMPTY_RECORD_KEY;
-    }
+    bool empty() { return this->key == EMPTY_RECORD_KEY; }
 
-    int key;
+    long key;
     T data;
 };
 
 template <typename T>
 class hash_table {
   public:
-    hash_table(unsigned int m) {
-        this->table.resize(m);
-    }
+    hash_table(unsigned int m) { this->table.resize(m); }
 
     std::vector<record<T>> table;
 
-    T *insert(int key, T const &data) {
+    T *insert(long key, T const &data) {
         record<T> *record = this->probe(key);
         if (record == nullptr) {
             return nullptr;
@@ -43,7 +37,7 @@ class hash_table {
         return &record->data;
     }
 
-    T *search(int key) {
+    T *search(long key) {
         record<T> *record = this->probe(key);
         if (record == nullptr || record->empty()) {
             return nullptr;
@@ -70,7 +64,7 @@ class hash_table {
     }
 
   private:
-    unsigned int probe(int key, record<T> *&result) {
+    unsigned int probe(long key, record<T> *&result) {
         unsigned int i;
         for (i = 0; i < this->table.size(); i++) {
             record<T> *record = &this->table[hash(key, i)];
@@ -83,28 +77,26 @@ class hash_table {
         return i;
     }
 
-    record<T> *probe(int key) {
+    record<T> *probe(long key) {
         record<T> *record = nullptr;
         this->probe(key, record);
 
         return record;
     }
 
-    unsigned int probe_collisions(int key) {
+    unsigned int probe_collisions(long key) {
         record<T> *_ = nullptr;
         return this->probe(key, _);
     }
 
-    int hash(int key, int index) {
+    int hash(long key, int index) {
         unsigned int m = this->table.size();
         return (h1(key, m) + index * h2(key, m)) % m;
     }
 
-    int h1(int k, unsigned int m) {
-        return k % m;
-    }
+    int h1(long k, unsigned int m) { return k % m; }
 
-    int h2(int k, int m) {
+    int h2(long k, unsigned int m) {
         double A = (sqrt(5) - 1) / 2;
         return floor(m * (fmod(k * A, 1)));
     }

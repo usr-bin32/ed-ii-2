@@ -63,6 +63,9 @@ void test_hashing() {
 
     // imprimindo as ocorrencias de autores em ordem decrescente
     for (int i = 0; i < m && i < author_vec.size(); i++) {
+        // caso um autor com zero ocorrências seja encontrado antes de i chegar
+        // a m, significa que todos os autores referenciados nos N livros já
+        // foram impressos
         if (author_vec[i].occurrences == 0) {
             break;
         }
