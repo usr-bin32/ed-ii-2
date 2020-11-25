@@ -27,9 +27,11 @@ void test_hashing() {
 
     int m = 0;
     do {
-        std::cout << "Insira quantos autores devem ser impresoss: ";
+        std::cout << "Insira quantos autores devem ser impressos: ";
         std::cin >> m;
     } while (m > n || m <= 0);
+
+    std::cout << std::endl;
 
     hash_table<author> authors(243699 * 1.25);
     read_authors(authors);

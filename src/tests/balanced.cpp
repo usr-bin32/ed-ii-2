@@ -209,12 +209,13 @@ void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
 }
 
 void generate_keys(std::vector<long> &keys) {
-    // os valores utilizados abaixo são os valores mínimo e máximo que um id
-    // pode ter dentro do arquivo de livros. Em uma distribuição uniforme, é
-    // estimado que apenas 0.0040% dos números gerados sejam um id existente,
-    // praticamente zero.
-    std::uniform_int_distribution<long> distribution(9771130767002,
-                                                     9798484760114);
+    // os valores utilizados abaixo são os entre os quartis 25% e 75% da
+    // distribuição estatística dos ids dos livros no arquivo, que se concentra
+    // num intervalo reduzido. Em uma distribuição uniforme, é estimado que
+    // apenas 0.06% dos números gerados sejam um id existente, praticamente
+    // zero.
+    std::uniform_int_distribution<long> distribution(9780804842776,
+                                                     9781727805954);
     std::default_random_engine generator;
     generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 
