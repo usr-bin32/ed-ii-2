@@ -227,7 +227,6 @@ void generate_keys(std::vector<long> &keys) {
     std::default_random_engine generator;
     generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 
-    keys.resize(size);
     std::generate(keys.begin(), keys.end(), [&distribution, &generator]() {
         return distribution(generator);
     });
