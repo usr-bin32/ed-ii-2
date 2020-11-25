@@ -36,3 +36,7 @@
 
 # CMake
 build
+
+# Output
+saidaBusca.txt
+saidaInsercao.txt
