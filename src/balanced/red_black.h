@@ -1,13 +1,9 @@
 #ifndef RED_BLACK_H
 #define RED_BLACK_H
-<<<<<<< HEAD
 #include <iostream>
-=======
-
 #include <algorithm>
 #include <bits/stdc++.h>
 
->>>>>>> 56d5516e17d1d20bac4d398534f8e1a73fcd5e62
 #include "red_black_node.h"
 
 template <typename T>
@@ -41,24 +37,15 @@ rbnode<T> *aux_insert(rbnode<T> *root, rbnode<T> *pt, int &comparisons)
 
     /* Caso contrário, volte para baixo na árvore */
     comparisons++;
-<<<<<<< HEAD
-    if (pt->key < root->key)
-    {
-=======
     if (pt->key < root->key) {
->>>>>>> 56d5516e17d1d20bac4d398534f8e1a73fcd5e62
         root->left = aux_insert(root->left, pt, comparisons);
         root->left->parent = root;
     }
     else
     {
         comparisons++;
-<<<<<<< HEAD
         if (pt->key >= root->key)
         {
-=======
-        if (pt->key > root->key) {
->>>>>>> 56d5516e17d1d20bac4d398534f8e1a73fcd5e62
             root->right = aux_insert(root->right, pt, comparisons);
             root->right->parent = root;
         }
@@ -116,7 +103,6 @@ template <typename T>
 T aux_search(rbnode<T> *aux, int key, int &comparisons)
 {
     comparisons++;
-<<<<<<< HEAD
     if (aux->key == key)
     {
         return aux->data;
@@ -137,16 +123,6 @@ T aux_search(rbnode<T> *aux, int key, int &comparisons)
                 std::cout << "Sou Maior" << std::endl;
                 return aux_search(aux->right, key, comparisons);
             }
-=======
-    if (aux->key > key) {
-        return aux_search(aux->left, key, comparisons);
-    } else {
-        comparisons++;
-        if (aux->key < key) {
-            return aux_search(aux->right, key, comparisons);
-        } else {
-            return aux->data;
->>>>>>> 56d5516e17d1d20bac4d398534f8e1a73fcd5e62
         }
     }
     return nullptr;
@@ -250,13 +226,9 @@ void red_black_tree<T>::fix_violation(rbnode<T> *&root, rbnode<T> *&pt)
                    pt é filho esquerdo de seu pai. Rotação à direita necessária
                 */
                 rotate_right(root, grand_parent_pt);
-<<<<<<< HEAD
                 bool auxColor = parent_pt->color;
                 parent_pt->color = grand_parent_pt->color;
                 grand_parent_pt->color = auxColor;
-=======
-                std::swap(parent_pt->color, grand_parent_pt->color);
->>>>>>> 56d5516e17d1d20bac4d398534f8e1a73fcd5e62
                 pt = parent_pt;
             }
         }
@@ -295,14 +267,10 @@ void red_black_tree<T>::fix_violation(rbnode<T> *&root, rbnode<T> *&pt)
                 necessária
                 */
                 rotate_left(root, grand_parent_pt);
-<<<<<<< HEAD
                 bool auxColor = parent_pt->color;
                 parent_pt->color = grand_parent_pt->color;
                 grand_parent_pt->color = auxColor;
 
-=======
-                std::swap(parent_pt->color, grand_parent_pt->color);
->>>>>>> 56d5516e17d1d20bac4d398534f8e1a73fcd5e62
                 pt = parent_pt;
             }
         }
