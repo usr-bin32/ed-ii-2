@@ -31,7 +31,7 @@ void test_hashing() {
         std::cin >> m;
     } while (m > n || m <= 0);
 
-    hash_table<author> authors(244000);
+    hash_table<author> authors(243699 * 1.25);
     read_authors(authors);
 
     hash_table<book> books(n * 1.15);
