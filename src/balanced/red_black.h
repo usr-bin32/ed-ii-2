@@ -13,7 +13,7 @@ class red_black_tree {
     red_black_tree() { root = nullptr; };
     ~red_black_tree() { destroy(root); }
 
-    void insert(T data, int key, int &comparisons);
+    void insert(int key, T data, int &comparisons);
     T *search(int key, int &comparisons);
     void print();
     void aux_print(rbnode<T> *&, int key);
@@ -234,7 +234,7 @@ void red_black_tree<T>::fix_violation(rbnode<T> *&node, rbnode<T> *&pt) {
 
 // insere um novo valor na arvore
 template <typename T>
-void red_black_tree<T>::insert(T data, int key, int &comparisons) {
+void red_black_tree<T>::insert(int key, T data, int &comparisons) {
     rbnode<T> *pt = new rbnode<T>(data, key);
 
     // insere o nó
