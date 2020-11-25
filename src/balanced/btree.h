@@ -34,7 +34,7 @@ btree<T>::~btree(){
 template <typename T>
 T* btree<T>::search(int key, int &comparisons) {
     comparisons++;
-    return (root == nullptr) ? nullptr : root->search(key,comparisons);
+    return (root == nullptr) ? nullptr : root->search(key, comparisons);
 };
 
 template <typename T>
@@ -47,7 +47,7 @@ void btree<T>::insert(int key, T data, int &comparisons) {
         root->key_numbers = 1;
        
     } else {
-	comparisons++;
+        comparisons++;
         if (root->key_numbers == 2 * degree - 1) {
             bnode<T> *node = new bnode<T>(degree, false);
             node->child[0] = root;

@@ -23,7 +23,6 @@ int main()
     std::cout << *b.search(3, c) << std::endl;
     std::cout << *b.search(4, c) << std::endl;
     std::cout << *b.search(0, c) << std::endl;
-
     return 0;
  
 }

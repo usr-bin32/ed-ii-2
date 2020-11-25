@@ -53,18 +53,17 @@ T* bnode<T>::search(int key, int &comparisons) {
     comparisons = comparisons + 2;
     while (i < key_numbers && key > keys[i])
         i++;
-    
+
     comparisons++;
     if (keys[i] == key){
     
         return &datas[i];
-    } //batata
+    } 
         
-
     if (leaf == true)
         return nullptr;
 
-    return child[i]->search(key,comparisons);
+    return child[i]->search(key, comparisons);
 }
 
 template <typename T>
@@ -96,7 +95,7 @@ void bnode<T>::insert_not_full(int key, T data, int &comparisons) {
     }
 
     else {
-	comparisons++;
+        comparisons++;
         while (i >= 0 && keys[i] > key)
             i--;
         if (child[i + 1]->key_numbers == 2 * degree - 1) {
@@ -132,8 +131,7 @@ void bnode<T>::split(bnode *node, int index) {
 
     child[index + 1] = node1;
 
-    for (int j = key_numbers - 1; j >= index; j--)
-    {
+    for (int j = key_numbers - 1; j >= index; j--) {
         keys[j + 1] = keys[j];
 	    datas[j + 1] = datas[j];
     }
@@ -147,7 +145,8 @@ template <typename T>
 int bnode<T>::search_key(int key, int &comparisons) {
     int i = 0;
     comparisons++;
-    for (i = 0; i < key_numbers && keys[i] < key; ++i);
+    for (i = 0; i < key_numbers && keys[i] < key; ++i)
+        ;
     return i;
 }
 
