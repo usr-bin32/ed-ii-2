@@ -9,12 +9,11 @@
 #include "../parsing/csv_parser.h"
 #include "../structures/book.h"
 #include "balanced.h"
+#include "common.h"
 
 constexpr int NUM_TESTS = 5;
 
 void read_input(std::vector<int> &input_sizes);
-void read_books(std::vector<book> &books);
-void shuffle(std::vector<book> &books);
 void generate_keys(std::vector<long> &keys);
 
 void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
@@ -83,31 +82,6 @@ void read_input(std::vector<int> &input_sizes) {
         input_file >> size;
 
         input_sizes.push_back(size);
-    }
-}
-
-void read_books(std::vector<book> &books) {
-    csv_parser parser("./res/books.csv");
-
-    if (!parser.is_open()) {
-        std::cerr << "Falha ao tentar abrir `books.csv`!" << std::endl;
-        return;
-    }
-
-    while (parser.read_line()) {
-        book b;
-        parser.get(0, b.authors);
-        parser.get(1, b.bestsellers_rank);
-        parser.get(2, b.categories);
-        parser.get(3, b.edition);
-        parser.get(4, b.id);
-        parser.get(5, b.isbn10);
-        parser.get(6, b.isbn13);
-        parser.get(7, b.rating);
-        parser.get(8, b.rating_count);
-        parser.get(9, b.title);
-
-        books.push_back(std::move(b));
     }
 }
 
@@ -209,12 +183,6 @@ void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
                << std::endl;
     search_out << "    Comparações: " << search_cmp / NUM_TESTS << std::endl;
     search_out << "    Tempo (s):   " << search_time / NUM_TESTS << std::endl;
-}
-
-void shuffle(std::vector<book> &books) {
-    unsigned int seed =
-        std::chrono::system_clock::now().time_since_epoch().count();
-    std::shuffle(books.begin(), books.end(), std::default_random_engine(seed));
 }
 
 void generate_keys(std::vector<long> &keys) {
