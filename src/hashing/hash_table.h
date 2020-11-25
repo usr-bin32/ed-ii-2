@@ -1,3 +1,6 @@
+#ifndef HASH_TABLE_H
+#define HASH_TABLE_H
+
 #include <cmath>
 #include <vector>
 
@@ -101,3 +104,5 @@ class hash_table {
         return floor(m * (fmod(k * A, 1)));
     }
 };
+
+#endif

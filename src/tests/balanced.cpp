@@ -31,18 +31,14 @@ void test_balanced() {
         return;
     }
 
-    // WIP
-    // float random_frac = 0.0f;
-    // do {
-    //     std::cout << "Insira a fração das chaves buscadas que será aleatória
-    //     "
-    //                  "(0 a 1): ";
-    //     std::cin >> random_frac;
-    // } while (random_frac < 0 || random_frac > 1);
-
     float random_frac = 0.0f;
+    do {
+        std::cout << "Insira a fração das chaves buscadas que será aleatória "
+                     "(0 a 1): ";
+        std::cin >> random_frac;
+    } while (random_frac < 0 || random_frac > 1);
 
-    // std::cout << std::endl;
+    std::cout << std::endl;
 
     std::vector<book> books;
     read_books(books);
@@ -164,7 +160,7 @@ void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
 
         btree<book *> tree(degree);
 
-        std::vector<int> indices(n - n * random_frac);
+        std::vector<int> indices(n);
         generate_indices(indices, books.size());
 
         // inserção
@@ -213,12 +209,13 @@ void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
 }
 
 void generate_keys(std::vector<long> &keys) {
-    // os valores utilizados abaixo são os valores mínimo e máximo que um id
-    // pode ter dentro do arquivo de livros. Em uma distribuição uniforme, é
-    // estimado que apenas 0.0040% dos números gerados sejam um id existente,
-    // praticamente zero.
-    std::uniform_int_distribution<long> distribution(9771130767002,
-                                                     9798484760114);
+    // os valores utilizados abaixo são os entre os quartis 25% e 75% da
+    // distribuição estatística dos ids dos livros no arquivo, que se concentra
+    // num intervalo reduzido. Em uma distribuição uniforme, é estimado que
+    // apenas 0.06% dos números gerados sejam um id existente, praticamente
+    // zero.
+    std::uniform_int_distribution<long> distribution(9780804842776,
+                                                     9781727805954);
     std::default_random_engine generator;
     generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 
