@@ -1,0 +1,33 @@
+N = 10
+Árvore Vermelho-Preto:
+    Comparações: 67
+    Tempo (s):   8e-07
+Árvore B (d = 2):
+    Comparações: 82
+    Tempo (s):   1e-06
+Árvore B (d = 20):
+    Comparações: 40
+    Tempo (s):   6e-07
+
+N = 200
+Árvore Vermelho-Preto:
+    Comparações: 3358
+    Tempo (s):   1.04e-05
+Árvore B (d = 2):
+    Comparações: 3475
+    Tempo (s):   1.46e-05
+Árvore B (d = 20):
+    Comparações: 1379
+    Tempo (s):   8.6e-06
+
+N = 3000
+Árvore Vermelho-Preto:
+    Comparações: 80038
+    Tempo (s):   0.0003218
+Árvore B (d = 2):
+    Comparações: 78907
+    Tempo (s):   0.0005184
+Árvore B (d = 20):
+    Comparações: 29674
+    Tempo (s):   0.0002314
+

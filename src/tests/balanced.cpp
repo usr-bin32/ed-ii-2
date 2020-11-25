@@ -12,36 +12,49 @@
 
 constexpr int NUM_TESTS = 5;
 
-void read_input(std::vector<int> &sizes);
+void read_input(std::vector<int> &input_sizes);
 void read_books(std::vector<book> &books);
-void test_red_black(std::vector<book> &books, int n);
-void test_btree(std::vector<book> &books, int n, int degree);
 void shuffle(std::vector<book> &books);
 
+void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
+                    std::ofstream &search_out);
+void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
+                std::ofstream &search_out, int degree);
+
 void test_balanced() {
-    std::vector<int> sizes;
-    read_input(sizes);
+    std::vector<int> input_sizes;
+    read_input(input_sizes);
 
     // abandona a execução caso não haja Ns de entrada
-    if (sizes.empty()) {
+    if (input_sizes.empty()) {
         return;
     }
 
     std::vector<book> books;
     read_books(books);
 
-    for (int n : sizes) {
-        std::cout << "N = " << n << std::endl;
+    std::ofstream insert_out("./saidaInsercao.txt", std::ios_base::trunc);
+    std::ofstream search_out("./saidaBusca.txt", std::ios_base::trunc);
 
-        test_red_black(books, n);
-        test_btree(books, n, 2);
-        test_btree(books, n, 20);
+    for (int n : input_sizes) {
+        std::cout << "N = " << n << std::endl;
+        insert_out << "N = " << n << std::endl;
+        search_out << "N = " << n << std::endl;
+
+        test_red_black(books, n, insert_out, search_out);
+        test_btree(books, n, insert_out, search_out, 2);
+        test_btree(books, n, insert_out, search_out, 20);
 
         std::cout << std::endl;
+        insert_out << std::endl;
+        search_out << std::endl;
     }
+
+    insert_out.close();
+    search_out.close();
 }
 
-void read_input(std::vector<int> &sizes) {
+void read_input(std::vector<int> &input_sizes) {
     std::ifstream input_file("./entrada.txt");
 
     if (!input_file.is_open()) {
@@ -52,12 +65,12 @@ void read_input(std::vector<int> &sizes) {
     int len = 0;
     input_file >> len;
 
-    sizes.reserve(len);
+    input_sizes.reserve(len);
     for (int i = 0; i < len; i++) {
         int size = 0;
         input_file >> size;
 
-        sizes.push_back(size);
+        input_sizes.push_back(size);
     }
 }
 
@@ -86,7 +99,8 @@ void read_books(std::vector<book> &books) {
     }
 }
 
-void test_red_black(std::vector<book> &books, int n) {
+void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
+                    std::ofstream &search_out) {
     int insertion_cmp = 0;
     double insertion_time = 0;
 
@@ -117,18 +131,27 @@ void test_red_black(std::vector<book> &books, int n) {
     }
 
     std::cout << "Árvore Vermelho-Preto:" << std::endl;
+    insert_out << "Árvore Vermelho-Preto:" << std::endl;
+    search_out << "Árvore Vermelho-Preto:" << std::endl;
 
-    std::cout << "    Média de Comparações nas Inserções: "
-              << insertion_cmp / NUM_TESTS << std::endl;
-    std::cout << "    Média de Comparações nas Buscas:    "
-              << search_cmp / NUM_TESTS << std::endl;
-    std::cout << "    Média de Tempo nas Inserções (s):   "
-              << insertion_time / NUM_TESTS << std::endl;
-    std::cout << "    Média de Tempo nas Buscas (s):      "
-              << search_time / NUM_TESTS << std::endl;
+    std::cout << "    Comparações nas Inserções: " << insertion_cmp / NUM_TESTS
+              << std::endl;
+    std::cout << "    Comparações nas Buscas:    " << search_cmp / NUM_TESTS
+              << std::endl;
+    std::cout << "    Tempo nas Inserções (s):   " << insertion_time / NUM_TESTS
+              << std::endl;
+    std::cout << "    Tempo nas Buscas (s):      " << search_time / NUM_TESTS
+              << std::endl;
+
+    insert_out << "    Comparações: " << insertion_cmp / NUM_TESTS << std::endl;
+    insert_out << "    Tempo (s):   " << insertion_time / NUM_TESTS
+               << std::endl;
+    search_out << "    Comparações: " << search_cmp / NUM_TESTS << std::endl;
+    search_out << "    Tempo (s):   " << search_time / NUM_TESTS << std::endl;
 }
 
-void test_btree(std::vector<book> &books, int n, int degree) {
+void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
+                std::ofstream &search_out, int degree) {
     int insertion_cmp = 0;
     double insertion_time = 0;
 
@@ -159,15 +182,23 @@ void test_btree(std::vector<book> &books, int n, int degree) {
     }
 
     std::cout << "Árvore B (d = " << degree << "):" << std::endl;
+    insert_out << "Árvore B (d = " << degree << "):" << std::endl;
+    search_out << "Árvore B (d = " << degree << "):" << std::endl;
 
-    std::cout << "    Média de Comparações nas Inserções: "
-              << insertion_cmp / NUM_TESTS << std::endl;
-    std::cout << "    Média de Comparações nas Buscas:    "
-              << search_cmp / NUM_TESTS << std::endl;
-    std::cout << "    Média de Tempo nas Inserções (s):   "
-              << insertion_time / NUM_TESTS << std::endl;
-    std::cout << "    Média de Tempo nas Buscas (s):      "
-              << search_time / NUM_TESTS << std::endl;
+    std::cout << "    Comparações nas Inserções: " << insertion_cmp / NUM_TESTS
+              << std::endl;
+    std::cout << "    Comparações nas Buscas:    " << search_cmp / NUM_TESTS
+              << std::endl;
+    std::cout << "    Tempo nas Inserções (s):   " << insertion_time / NUM_TESTS
+              << std::endl;
+    std::cout << "    Tempo nas Buscas (s):      " << search_time / NUM_TESTS
+              << std::endl;
+
+    insert_out << "    Comparações: " << insertion_cmp / NUM_TESTS << std::endl;
+    insert_out << "    Tempo (s):   " << insertion_time / NUM_TESTS
+               << std::endl;
+    search_out << "    Comparações: " << search_cmp / NUM_TESTS << std::endl;
+    search_out << "    Tempo (s):   " << search_time / NUM_TESTS << std::endl;
 }
 
 void shuffle(std::vector<book> &books) {
