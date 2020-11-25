@@ -16,7 +16,7 @@ public:
     };
 
     void insert(T data, int key, int &comparisons);
-    T* search(int key, int &comparisons);
+    T *search(int key, int &comparisons);
     void imprime();
     void aux_imprime(rbnode<T> *&, int key);
 
@@ -33,28 +33,27 @@ rbnode<T> *aux_insert(rbnode<T> *root, rbnode<T> *pt, int &comparisons)
     /* Se a árvore estiver vazia, retorna um novo nó */
     comparisons++;
     if (root == nullptr)
+    {
         return pt;
-
-    /* Caso contrário, volte para baixo na árvore */
-    comparisons++;
-    if (pt->key < root->key) {
-        root->left = aux_insert(root->left, pt, comparisons);
-        root->left->parent = root;
     }
     else
     {
-        comparisons++;
-        if (pt->key >= root->key)
+        /* Caso contrário, volte para baixo na árvore */
+        if (pt->key < root->key)
+        {
+            root->left = aux_insert(root->left, pt, comparisons);
+            root->left->parent = root;
+        }
+        else
         {
             root->right = aux_insert(root->right, pt, comparisons);
             root->right->parent = root;
         }
     }
+
     /* retornar o ponteiro do nó (inalterado) */
     return root;
 };
-
-
 
 template <typename T>
 void red_black_tree<T>::imprime()
@@ -85,24 +84,20 @@ void red_black_tree<T>::aux_imprime(rbnode<T> *&p, int key)
 }
 
 template <typename T>
-T* red_black_tree<T>::search(int key, int &comparisons)
+T *red_black_tree<T>::search(int key, int &comparisons)
 {
-    comparisons++;
-
     if (this->root->key == key)
     {
-
         return &root->data;
     }
     else
     {
-
         return aux_search(this->root, key, comparisons);
     }
 }
 
 template <typename T>
-T* aux_search(rbnode<T> *aux, int key, int &comparisons)
+T *aux_search(rbnode<T> *aux, int key, int &comparisons)
 {
     comparisons++;
     if (aux->key == key)
@@ -111,20 +106,13 @@ T* aux_search(rbnode<T> *aux, int key, int &comparisons)
     }
     else
     {
-        comparisons++;
         if (aux->key > key)
         {
-            std::cout << "Sou Menor" << std::endl;
             return aux_search(aux->left, key, comparisons);
         }
         else
         {
-            comparisons++;
-            if (aux->key < key)
-            {
-                std::cout << "Sou Maior" << std::endl;
-                return aux_search(aux->right, key, comparisons);
-            }
+            return aux_search(aux->right, key, comparisons);
         }
     }
     return nullptr;
