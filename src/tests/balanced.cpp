@@ -12,30 +12,60 @@
 
 constexpr int NUM_TESTS = 5;
 
+void read_input(std::vector<int> &sizes);
 void read_books(std::vector<book> &books);
 void test_red_black(std::vector<book> &books, int n);
 void test_btree(std::vector<book> &books, int n, int degree);
 void shuffle(std::vector<book> &books);
 
 void test_balanced() {
-    int n;
-    std::cout << "Insira o valor de N: ";
-    std::cin >> n;
-    std::cout << std::endl;
+    std::vector<int> sizes;
+    read_input(sizes);
+
+    // abandona a execução caso não haja Ns de entrada
+    if (sizes.empty()) {
+        return;
+    }
 
     std::vector<book> books;
     read_books(books);
 
-    test_red_black(books, n);
-    test_btree(books, n, 2);
-    test_btree(books, n, 20);
+    for (int n : sizes) {
+        std::cout << "N = " << n << std::endl;
+
+        test_red_black(books, n);
+        test_btree(books, n, 2);
+        test_btree(books, n, 20);
+
+        std::cout << std::endl;
+    }
+}
+
+void read_input(std::vector<int> &sizes) {
+    std::ifstream input_file("./entrada.txt");
+
+    if (!input_file.is_open()) {
+        std::cerr << "Falha ao tentar abrir `entrada.txt`!" << std::endl;
+        return;
+    }
+
+    int len = 0;
+    input_file >> len;
+
+    sizes.reserve(len);
+    for (int i = 0; i < len; i++) {
+        int size = 0;
+        input_file >> size;
+
+        sizes.push_back(size);
+    }
 }
 
 void read_books(std::vector<book> &books) {
     csv_parser parser("./res/books.csv");
 
     if (!parser.is_open()) {
-        std::cerr << "Failed to open `books.csv`!" << std::endl;
+        std::cerr << "Falha ao tentar abrir `books.csv`!" << std::endl;
         return;
     }
 
