@@ -10,34 +10,25 @@
 #include "../structures/book.h"
 #include "balanced.h"
 
+constexpr int NUM_TESTS = 5;
+
 void read_books(std::vector<book> &books);
+void test_red_black(std::vector<book> &books, int n);
+void test_btree(std::vector<book> &books, int n, int degree);
 void shuffle(std::vector<book> &books);
 
 void test_balanced() {
     int n;
     std::cout << "Insira o valor de N: ";
     std::cin >> n;
+    std::cout << std::endl;
 
     std::vector<book> books;
+    read_books(books);
 
-    int insertion_comparisons = 0;
-    int search_comparisons = 0;
-    for (int i = 0; i < 5; i++) {
-        shuffle(books);
-        std::cout << "oops\n";
-        red_black_tree<int> tree;
-
-        for (int i = 0; i < n; i++) {
-            tree.insert(100, books[i].id, insertion_comparisons);
-        }
-
-        for (int i = 0; i < n; i++) {
-            tree.search(books[i].id, search_comparisons);
-        }
-    }
-
-    std::cout << "Média Inserções: " << insertion_comparisons / 5 << std::endl;
-    std::cout << "Média Busca: " << search_comparisons / 5 << std::endl;
+    test_red_black(books, n);
+    test_btree(books, n, 2);
+    test_btree(books, n, 20);
 }
 
 void read_books(std::vector<book> &books) {
@@ -63,6 +54,90 @@ void read_books(std::vector<book> &books) {
 
         books.push_back(std::move(b));
     }
+}
+
+void test_red_black(std::vector<book> &books, int n) {
+    int insertion_cmp = 0;
+    double insertion_time = 0;
+
+    int search_cmp = 0;
+    double search_time = 0;
+
+    for (int i = 0; i < NUM_TESTS; i++) {
+        double t0;
+        double t1;
+
+        shuffle(books);
+
+        red_black_tree<book> tree;
+
+        t0 = double(clock()) / CLOCKS_PER_SEC;
+        for (int i = 0; i < n; i++) {
+            tree.insert(books[i], books[i].id, insertion_cmp);
+        }
+        t1 = double(clock()) / CLOCKS_PER_SEC;
+        insertion_time += t1 - t0;
+
+        t0 = double(clock()) / CLOCKS_PER_SEC;
+        for (int i = 0; i < n; i++) {
+            tree.search(books[i].id, search_cmp);
+        }
+        t1 = double(clock()) / CLOCKS_PER_SEC;
+        search_time += t1 - t0;
+    }
+
+    std::cout << "Árvore Vermelho-Preto:" << std::endl;
+
+    std::cout << "    Média de Comparações nas Inserções: "
+              << insertion_cmp / NUM_TESTS << std::endl;
+    std::cout << "    Média de Comparações nas Buscas:    "
+              << search_cmp / NUM_TESTS << std::endl;
+    std::cout << "    Média de Tempo nas Inserções (s):   "
+              << insertion_time / NUM_TESTS << std::endl;
+    std::cout << "    Média de Tempo nas Buscas (s):      "
+              << search_time / NUM_TESTS << std::endl;
+}
+
+void test_btree(std::vector<book> &books, int n, int degree) {
+    int insertion_cmp = 0;
+    double insertion_time = 0;
+
+    int search_cmp = 0;
+    double search_time = 0;
+
+    for (int i = 0; i < NUM_TESTS; i++) {
+        double t0;
+        double t1;
+
+        shuffle(books);
+
+        btree<book> tree(degree);
+
+        t0 = double(clock()) / CLOCKS_PER_SEC;
+        for (int i = 0; i < n; i++) {
+            tree.insert(books[i].id, books[i], insertion_cmp);
+        }
+        t1 = double(clock()) / CLOCKS_PER_SEC;
+        insertion_time += t1 - t0;
+
+        t0 = double(clock()) / CLOCKS_PER_SEC;
+        for (int i = 0; i < n; i++) {
+            tree.search(books[i].id, search_cmp);
+        }
+        t1 = double(clock()) / CLOCKS_PER_SEC;
+        search_time += t1 - t0;
+    }
+
+    std::cout << "Árvore B (d = " << degree << "):" << std::endl;
+
+    std::cout << "    Média de Comparações nas Inserções: "
+              << insertion_cmp / NUM_TESTS << std::endl;
+    std::cout << "    Média de Comparações nas Buscas:    "
+              << search_cmp / NUM_TESTS << std::endl;
+    std::cout << "    Média de Tempo nas Inserções (s):   "
+              << insertion_time / NUM_TESTS << std::endl;
+    std::cout << "    Média de Tempo nas Buscas (s):      "
+              << search_time / NUM_TESTS << std::endl;
 }
 
 void shuffle(std::vector<book> &books) {
