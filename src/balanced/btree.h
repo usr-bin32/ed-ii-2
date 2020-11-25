@@ -9,10 +9,10 @@ class btree {
     btree(int degree1);
     ~btree();
 
-    T *search(int key, int &comparisons);
-    void insert(int key, T data, int &comparisons);
+    T *search(long key, int &comparisons);
+    void insert(long key, T data, int &comparisons);
     void walk();
-    void remove(int key);
+    void remove(long key);
 
   private:
     int degree;
@@ -31,13 +31,13 @@ btree<T>::~btree() {
 }
 
 template <typename T>
-T *btree<T>::search(int key, int &comparisons) {
+T *btree<T>::search(long key, int &comparisons) {
     comparisons++;
     return (root == nullptr) ? nullptr : root->search(key, comparisons);
 };
 
 template <typename T>
-void btree<T>::insert(int key, T data, int &comparisons) {
+void btree<T>::insert(long key, T data, int &comparisons) {
     comparisons++;
     if (root == nullptr) {
         root = new bnode<T>(degree, true);
@@ -71,7 +71,7 @@ void btree<T>::walk() {
 }
 
 template <typename T>
-void btree<T>::remove(int key) {
+void btree<T>::remove(long key) {
     if (!root) {
         std::cout << "Árvore vazia" << std::endl;
     }
