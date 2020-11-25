@@ -116,15 +116,13 @@ void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
         // busca com chaves aleatórias
         std::vector<long> random_keys(n * random_frac);
         generate_keys(random_keys);
-        std::cout << "RANDOM: " << random_keys.size() << std::endl;
+
         t0 = double(clock()) / CLOCKS_PER_SEC;
         for (auto key : random_keys) {
             tree.search(key, search_cmp);
         }
 
         // busca com chaves presentes
-        std::cout << "PRESENT: " << (int)(n * (1 - random_frac)) << std::endl;
-
         for (int i = 0; i < n * (1 - random_frac); i++) {
             tree.search(books[indices[i]].id, search_cmp);
         }
