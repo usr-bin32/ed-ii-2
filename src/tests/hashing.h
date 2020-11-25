@@ -37,7 +37,8 @@ void read_books(std::vector<book> &books) {
     }
 }
 
-void read_authors(std::vector<std::pair<int, std::string>> &authors) {
+// le o csv de authors e os adicionam em uma hash table
+void read_authors(hash_table<author> &authors) {
     csv_parser parser("./res/authors.csv");
 
     if (!parser.is_open()) {
@@ -48,10 +49,13 @@ void read_authors(std::vector<std::pair<int, std::string>> &authors) {
     while (parser.read_line()) {
         int id;
         std::string name;
+        author aux;
         parser.get(0, id);
         parser.get(1, name);
 
-        authors.push_back( std::make_pair(id, name));
+        aux.name = name;
+        aux.occurrences = 0;
+        authors.insert(id, aux);
     }
 }
 
@@ -71,25 +75,15 @@ void test_hashing() {
         std::cin >> m;
     }while(m>n);
 
-    int tam_books = (n + n*0.20), tam_authors; 
-    std::vector<std::pair<int, std::string>> authors;
-    read_authors(authors);
-    tam_authors = authors.size() + authors.size()*0.20;
-
-    hash_table<author> hash_authors(tam_authors);
+    int tam_books = (n + n*0.20);
+    hash_table<author> hash_authors(244000);
+    read_authors(hash_authors);
+   
     hash_table<book> hash_books(tam_books);
     std::vector<book> books;
     read_books(books); 
     shuffle(books);
     books.resize(n);
-
-    // armazena os autores em hash table
-    for (auto &a : authors) {
-        author aux;
-        aux.name = a.second;
-        aux.occurrences = 0;
-        hash_authors.insert(a.first, aux);
-    }
 
     // armazenando os livros lidos em uma hash table
     // coloca as ocorrencias dos autores na hash authors e verifica se tem algum autor nao cadastrado no csv
