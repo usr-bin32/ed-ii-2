@@ -1,6 +1,6 @@
+#include "balanced/btree.h"
 #include "balanced/red_black.h"
 #include "hashing/hash_table.h"
-#include "balanced/btree.h"
 
 #include <iostream>
 #include <string>

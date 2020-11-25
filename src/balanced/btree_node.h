@@ -83,7 +83,7 @@ void bnode<T>::insert_not_full(int key, T data, int &comparisons) {
     if (leaf == true) {
         while (i >= 0 && keys[i] > key) {
             keys[i + 1] = keys[i];
-            datas[i + 1] = data[i];
+            datas[i + 1] = datas[i];
             i--;
         }
         keys[i + 1] = key;
