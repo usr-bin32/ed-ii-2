@@ -45,7 +45,6 @@ void btree<T>::insert(long key, T data, int &comparisons) {
         root->datas[0] = data;
         root->key_numbers = 1;
     } else {
-        comparisons++;
         if (root->key_numbers == 2 * degree - 1) {
             bnode<T> *node = new bnode<T>(degree, false);
             node->child[0] = root;
@@ -53,12 +52,14 @@ void btree<T>::insert(long key, T data, int &comparisons) {
 
             int i = 0;
             if (node->keys[0] < key)
-                i++;
+            {   
+  		i++;
+		comparisons++;
+	    }
             node->child[i]->insert_not_full(key, data, comparisons);
 
             root = node;
         } else {
-            comparisons++;
             root->insert_not_full(key, data, comparisons);
         }
     }

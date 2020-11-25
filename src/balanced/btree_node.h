@@ -51,11 +51,13 @@ bnode<T>::bnode(int degree1, bool leaf1) {
 template <typename T>
 T *bnode<T>::search(long key, int &comparisons) {
     int i = 0;
-    comparisons = comparisons + 2;
-    while (i < key_numbers && key > keys[i])
-        i++;
-
     comparisons++;
+
+    while (i < key_numbers && key > keys[i]){
+        i++;
+	comparisons++;
+    }
+
     if (keys[i] == key) {
         return &datas[i];
     }
@@ -87,6 +89,7 @@ void bnode<T>::insert_not_full(long key, T data, int &comparisons) {
             keys[i + 1] = keys[i];
             datas[i + 1] = datas[i];
             i--;
+	    comparisons++;
         }
         keys[i + 1] = key;
         datas[i + 1] = data;
@@ -94,9 +97,10 @@ void bnode<T>::insert_not_full(long key, T data, int &comparisons) {
     }
 
     else {
-        comparisons++;
-        while (i >= 0 && keys[i] > key)
+        while (i >= 0 && keys[i] > key){
             i--;
+	    comparisons++;
+	}
         if (child[i + 1]->key_numbers == 2 * degree - 1) {
             split(child[i + 1], i + 1);
             if (keys[i + 1] < key)
@@ -145,7 +149,9 @@ int bnode<T>::search_key(long key, int &comparisons) {
     int i = 0;
     comparisons++;
     for (i = 0; i < key_numbers && keys[i] < key; ++i)
-        ;
+    { 
+	comparisons++;
+    }
     return i;
 }
 
