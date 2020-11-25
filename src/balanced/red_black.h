@@ -16,7 +16,7 @@ public:
     };
 
     void insert(T data, int key, int &comparisons);
-    T search(int key, int &comparisons);
+    T* search(int key, int &comparisons);
     void imprime();
     void aux_imprime(rbnode<T> *&, int key);
 
@@ -54,22 +54,7 @@ rbnode<T> *aux_insert(rbnode<T> *root, rbnode<T> *pt, int &comparisons)
     return root;
 };
 
-template <typename T>
-T red_black_tree<T>::search(int key, int &comparisons)
-{
-    comparisons++;
 
-    if (this->root->key == key)
-    {
-
-        return root->data;
-    }
-    else
-    {
-
-        return aux_search(this->root, key, comparisons);
-    }
-}
 
 template <typename T>
 void red_black_tree<T>::imprime()
@@ -100,12 +85,29 @@ void red_black_tree<T>::aux_imprime(rbnode<T> *&p, int key)
 }
 
 template <typename T>
-T aux_search(rbnode<T> *aux, int key, int &comparisons)
+T* red_black_tree<T>::search(int key, int &comparisons)
+{
+    comparisons++;
+
+    if (this->root->key == key)
+    {
+
+        return &root->data;
+    }
+    else
+    {
+
+        return aux_search(this->root, key, comparisons);
+    }
+}
+
+template <typename T>
+T* aux_search(rbnode<T> *aux, int key, int &comparisons)
 {
     comparisons++;
     if (aux->key == key)
     {
-        return aux->data;
+        return &aux->data;
     }
     else
     {
