@@ -12,6 +12,7 @@ class bnode {
     bnode **child;
     int *keys;
     int key_numbers;
+    T *datas;
 
     bnode *search(int key);
     void insert_not_full(int key);
@@ -39,6 +40,7 @@ bnode<T>::bnode(int degree1, bool leaf1) {
     leaf = leaf1;
 
     keys = new int[2 * degree - 1];
+    datas = new T[2 * degrre - 1];
     child = new bnode<T> *[2 * degree];
 
     key_numbers = 0;
@@ -72,15 +74,17 @@ bnode<T> *bnode<T>::search(int key) {
 }
 
 template <typename T>
-void bnode<T>::insert_not_full(int key) {
+void bnode<T>::insert_not_full(int key, T data) {
     int i = key_numbers - 1;
 
     if (leaf == true) {
         while (i >= 0 && keys[i] > key) {
             keys[i + 1] = keys[i];
+	    datas[i + 1] = data[i];
             i--;
         }
         keys[i + 1] = key;
+	datas[i + 1] = data;
         key_numbers = key_numbers + 1;
     }
 
@@ -92,7 +96,7 @@ void bnode<T>::insert_not_full(int key) {
             if (keys[i + 1] < key)
                 i++;
         }
-        child[i + 1]->insert_not_full(key);
+        child[i + 1]->insert_not_full(key, data);
     }
 }
 
@@ -117,17 +121,20 @@ void bnode<T>::split(bnode *node, int index) {
     child[index + 1] = node1;
 
     for (int j = key_numbers - 1; j >= index; j--)
+    {
         keys[j + 1] = keys[j];
+	datas[j + 1] = datas[j];
+    }
 
     keys[index] = node->keys[degree - 1];
+    datas[index] = node->datas[degree - 1];
     key_numbers = key_numbers + 1;
 }
 
 template <typename T>
 int bnode<T>::search_key(int key) {
     int i = 0;
-    for (i = 0; i < key_numbers && keys[i] < key; ++i)
-        ;
+    for (i = 0; i < key_numbers && keys[i] < key; ++i);
     return i;
 }
 
