@@ -10,7 +10,7 @@ class btree {
     ~btree();
 
     T *search(long key, int &comparisons);
-    void insert(long key, T data, int &comparisons);
+    void insert(long key, T value, int &comparisons);
     void walk();
     void remove(long key);
 
@@ -37,12 +37,12 @@ T *btree<T>::search(long key, int &comparisons) {
 };
 
 template <typename T>
-void btree<T>::insert(long key, T data, int &comparisons) {
+void btree<T>::insert(long key, T value, int &comparisons) {
     comparisons++;
     if (root == nullptr) {
         root = new bnode<T>(degree, true);
         root->keys[0] = key;
-        root->datas[0] = data;
+        root->values[0] = value;
         root->key_numbers = 1;
     } else {
         if (root->key_numbers == 2 * degree - 1) {
@@ -52,15 +52,15 @@ void btree<T>::insert(long key, T data, int &comparisons) {
 
             int i = 0;
             if (node->keys[0] < key)
-            {   
+            {
   		i++;
 		comparisons++;
 	    }
-            node->child[i]->insert_not_full(key, data, comparisons);
+            node->child[i]->insert_not_full(key, value, comparisons);
 
             root = node;
         } else {
-            root->insert_not_full(key, data, comparisons);
+            root->insert_not_full(key, value, comparisons);
         }
     }
 }

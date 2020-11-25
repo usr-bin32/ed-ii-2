@@ -7,15 +7,15 @@ template <typename T>
 struct record {
     record() { this->key = EMPTY_RECORD_KEY; }
 
-    record(long key, T const &data) {
+    record(long key, T const &value) {
         this->key = key;
-        this->data = data;
+        this->value = value;
     }
 
     bool empty() { return this->key == EMPTY_RECORD_KEY; }
 
     long key;
-    T data;
+    T value;
 };
 
 template <typename T>
@@ -25,16 +25,16 @@ class hash_table {
 
     std::vector<record<T>> table;
 
-    T *insert(long key, T const &data) {
+    T *insert(long key, T const &value) {
         record<T> *record = this->probe(key);
         if (record == nullptr) {
             return nullptr;
         }
 
         record->key = key;
-        record->data = data;
+        record->value = value;
 
-        return &record->data;
+        return &record->value;
     }
 
     T *search(long key) {
@@ -42,7 +42,7 @@ class hash_table {
         if (record == nullptr || record->empty()) {
             return nullptr;
         }
-        return &record->data;
+        return &record->value;
     }
 
     unsigned int collisions() {
@@ -58,7 +58,7 @@ class hash_table {
     void to_vector(std::vector<T> &vetor) {
         for (auto &record : this->table) {
             if (!record.empty()) {
-                vetor.push_back(record.data);
+                vetor.push_back(record.value);
             }
         }
     }

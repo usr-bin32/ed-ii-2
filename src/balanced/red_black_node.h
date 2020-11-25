@@ -5,14 +5,14 @@ enum Color { RED, BLACK };
 
 template <typename T>
 struct rbnode {
-    rbnode(T data, long key) {
-        this->data = data;
+    rbnode(T value, long key) {
+        this->value = value;
         this->key = key;
         left = right = parent = nullptr;
         this->color = RED;
     }
 
-    T data;
+    T value;
     long key;
     bool color;
     rbnode *left, *right, *parent;
