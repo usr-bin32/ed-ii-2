@@ -1,3 +1,6 @@
+#ifndef BOOK_H
+#define BOOK_H
+
 #include <string>
 #include <vector>
 
@@ -13,3 +16,5 @@ struct book {
     long rating_count;
     std::string title;
 };
+
+#endif

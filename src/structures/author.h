@@ -1,3 +1,6 @@
+#ifndef AUTHOR_H
+#define AUTHOR_H
+
 #include <string>
 
 struct author {
@@ -13,3 +16,5 @@ struct author {
     bool operator==(const author &a2);
     bool operator!=(const author &a2);
 };
+
+#endif
