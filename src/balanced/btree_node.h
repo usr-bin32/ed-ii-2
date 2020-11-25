@@ -4,7 +4,7 @@
 #include <iostream>
 
 template <typename T>
-class bnode{
+class bnode {
   public:
     bnode(int degree1, bool leaf1);
     bnode **child;
@@ -12,10 +12,11 @@ class bnode{
     bool leaf;
     int *keys;
     T *datas;
-    
-    int get_key(bnode *node, int index){ return node->keys[index];};
+
+    int get_key(bnode *node, int index) { return node->keys[index]; };
+
     T *search(int key, int &comparisons);
-    void insert_not_full(int key,T data, int &comparisons);
+    void insert_not_full(int key, T data, int &comparisons);
     void walk();
     void split(bnode *node, int index);
     void remove(int key);
@@ -48,18 +49,17 @@ bnode<T>::bnode(int degree1, bool leaf1) {
 }
 
 template <typename T>
-T* bnode<T>::search(int key, int &comparisons) {
+T *bnode<T>::search(int key, int &comparisons) {
     int i = 0;
     comparisons = comparisons + 2;
     while (i < key_numbers && key > keys[i])
         i++;
 
     comparisons++;
-    if (keys[i] == key){
-    
+    if (keys[i] == key) {
         return &datas[i];
-    } 
-        
+    }
+
     if (leaf == true)
         return nullptr;
 
@@ -72,7 +72,6 @@ void bnode<T>::walk() {
     for (i = 0; i < key_numbers; i++) {
         if (leaf == false)
             child[i]->walk();
-       
     }
     if (leaf == false)
         child[i]->walk();
@@ -86,11 +85,11 @@ void bnode<T>::insert_not_full(int key, T data, int &comparisons) {
     if (leaf == true) {
         while (i >= 0 && keys[i] > key) {
             keys[i + 1] = keys[i];
-	        datas[i + 1] = datas[i];
+            datas[i + 1] = datas[i];
             i--;
         }
         keys[i + 1] = key;
-	    datas[i + 1] = data;
+        datas[i + 1] = data;
         key_numbers = key_numbers + 1;
     }
 
@@ -112,20 +111,20 @@ void bnode<T>::split(bnode *node, int index) {
     bnode<T> *node1 = new bnode(node->degree, node->leaf);
     node1->key_numbers = degree - 1;
 
-    for (int j = 0; j < degree - 1; j++){
+    for (int j = 0; j < degree - 1; j++) {
         node1->keys[j] = node->keys[j + degree];
         node1->datas[j] = node->datas[j + degree];
     }
-    
+
     if (node->leaf == false) {
-        for (int j = 0; j < degree; j++){
+        for (int j = 0; j < degree; j++) {
             node1->child[j] = node->child[j + degree];
         }
     }
 
     node->key_numbers = degree - 1;
 
-    for (int j = key_numbers; j >= index + 1; j--){
+    for (int j = key_numbers; j >= index + 1; j--) {
         child[j + 1] = child[j];
     }
 
@@ -133,7 +132,7 @@ void bnode<T>::split(bnode *node, int index) {
 
     for (int j = key_numbers - 1; j >= index; j--) {
         keys[j + 1] = keys[j];
-	    datas[j + 1] = datas[j];
+        datas[j + 1] = datas[j];
     }
 
     keys[index] = node->keys[degree - 1];
@@ -189,11 +188,11 @@ void bnode<T>::borrow_key_before(int i) {
     bnode<T> *c = child[i];
     bnode<T> *sib = child[i - 1];
 
-    for (int j = c->key_numbers - 1; j >= 0; --j){
+    for (int j = c->key_numbers - 1; j >= 0; --j) {
         c->keys[j + 1] = c->keys[j];
         c->datas[j + 1] = c->datas[j];
     }
-        
+
     if (!c->leaf) {
         for (int j = c->key_numbers; j >= 0; --j)
             c->child[j + 1] = c->child[j];
@@ -227,7 +226,7 @@ void bnode<T>::borrow_key_after(int i) {
     keys[i] = sib->keys[0];
     datas[i] = sib->datas[0];
 
-    for (int j = 1; j < sib->key_numbers; ++j){
+    for (int j = 1; j < sib->key_numbers; ++j) {
         sib->keys[j - 1] = sib->keys[j];
         sib->datas[j - 1] = sib->datas[j];
     }
@@ -249,17 +248,17 @@ void bnode<T>::merge(int i) {
     c->keys[degree - 1] = keys[i];
     c->datas[degree - 1] = datas[i];
 
-    for (int j = 0; j < sib->key_numbers; ++j){
+    for (int j = 0; j < sib->key_numbers; ++j) {
         c->keys[j + degree] = sib->keys[j];
         c->datas[j + degree] = sib->datas[j];
     }
 
     if (!c->leaf) {
         for (int j = 0; j < sib->key_numbers; ++j)
-             c->child[degree + j] = sib->child[j];
+            c->child[degree + j] = sib->child[j];
     }
 
-    for (int k = i + 1; k < key_numbers; ++k){
+    for (int k = i + 1; k < key_numbers; ++k) {
         keys[k - 1] = keys[k];
         datas[k - 1] = datas[k];
     }
@@ -270,7 +269,7 @@ void bnode<T>::merge(int i) {
     c->key_numbers = c->key_numbers + sib->key_numbers + 1;
     key_numbers--;
 
-    delete (sib);
+    delete sib;
 }
 
 template <typename T>
@@ -300,11 +299,11 @@ void bnode<T>::remove(int key) {
 
 template <typename T>
 void bnode<T>::remove_leaf(int i) {
-    for (int j = i + 1; j < key_numbers; ++j){
+    for (int j = i + 1; j < key_numbers; ++j) {
         keys[j - 1] = keys[j];
         datas[j - 1] = datas[j];
     }
-       
+
     key_numbers--;
 }
 
@@ -327,7 +326,5 @@ void bnode<T>::remove_not_leaf(int i) {
         child[i]->remove(key);
     }
 }
-
-
 
 #endif // BTREE_NODE_H

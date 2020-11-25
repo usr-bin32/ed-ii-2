@@ -6,11 +6,9 @@
 #include <iostream>
 #include <string>
 
-
-int main()
-{
+int main() {
     btree<std::string> b(2);
-  
+
     int c;
     b.insert(100, "Hello", c);
     b.insert(1, "Darkness", c);
@@ -24,5 +22,4 @@ int main()
     std::cout << *b.search(4, c) << std::endl;
     std::cout << *b.search(0, c) << std::endl;
     return 0;
- 
 }
