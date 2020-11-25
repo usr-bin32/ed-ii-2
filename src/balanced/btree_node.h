@@ -14,8 +14,8 @@ class bnode {
     int key_numbers;
     T *datas;
 
-    bnode *search(int key, int &comparisons);
-    void insert_not_full(int key, int &comparisons);
+    T *search(int key, int &comparisons);
+    void insert_not_full(int key, T data, int &comparisons);
     void walk();
     void split(bnode *node, int index);
     void remove(int key);
@@ -40,7 +40,7 @@ bnode<T>::bnode(int degree1, bool leaf1) {
     leaf = leaf1;
 
     keys = new int[2 * degree - 1];
-    datas = new T[2 * degrre - 1];
+    datas = new T[2 * degree - 1];
     child = new bnode<T> *[2 * degree];
 
     key_numbers = 0;
@@ -59,20 +59,20 @@ void bnode<T>::walk() {
 }
 
 template <typename T>
-T<T> *bnode<T>::search(int key, int &comparisons) {
+T *bnode<T>::search(int key, int &comparisons) {
     int i = 0;
     comparisons = comparisons + 2;
     while (i < key_numbers && key > keys[i])
         i++;
-    
+
     comparisons++;
     if (keys[i] == key)
-        return data[i];
+        return &(datas[i]);
 
     if (leaf == true)
         return nullptr;
 
-    return child[i]->search(key,comparisons);
+    return child[i]->search(key, comparisons);
 }
 
 template <typename T>
@@ -83,16 +83,16 @@ void bnode<T>::insert_not_full(int key, T data, int &comparisons) {
     if (leaf == true) {
         while (i >= 0 && keys[i] > key) {
             keys[i + 1] = keys[i];
-	    datas[i + 1] = data[i];
+            datas[i + 1] = data[i];
             i--;
         }
         keys[i + 1] = key;
-	datas[i + 1] = data;
+        datas[i + 1] = data;
         key_numbers = key_numbers + 1;
     }
 
     else {
-	comparisons++;
+        comparisons++;
         while (i >= 0 && keys[i] > key)
             i--;
         if (child[i + 1]->key_numbers == 2 * degree - 1) {
@@ -124,10 +124,9 @@ void bnode<T>::split(bnode *node, int index) {
 
     child[index + 1] = node1;
 
-    for (int j = key_numbers - 1; j >= index; j--)
-    {
+    for (int j = key_numbers - 1; j >= index; j--) {
         keys[j + 1] = keys[j];
-	datas[j + 1] = datas[j];
+        datas[j + 1] = datas[j];
     }
 
     keys[index] = node->keys[degree - 1];
@@ -139,7 +138,8 @@ template <typename T>
 int bnode<T>::search_key(int key, int &comparisons) {
     int i = 0;
     comparisons++;
-    for (i = 0; i < key_numbers && keys[i] < key; ++i);
+    for (i = 0; i < key_numbers && keys[i] < key; ++i)
+        ;
     return i;
 }
 
