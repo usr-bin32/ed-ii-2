@@ -100,11 +100,11 @@ void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
         double t1;
 
         shuffle(books);
-        red_black_tree<book> tree;
+        red_black_tree<book *> tree;
 
         t0 = double(clock()) / CLOCKS_PER_SEC;
         for (int i = 0; i < n; i++) {
-            tree.insert(books[i].id, books[i], insertion_cmp);
+            tree.insert(books[i].id, &books[i], insertion_cmp);
         }
         t1 = double(clock()) / CLOCKS_PER_SEC;
         insertion_time += t1 - t0;
@@ -160,11 +160,11 @@ void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
         double t1;
 
         shuffle(books);
-        btree<book> tree(degree);
+        btree<book *> tree(degree);
 
         t0 = double(clock()) / CLOCKS_PER_SEC;
         for (int i = 0; i < n; i++) {
-            tree.insert(books[i].id, books[i], insertion_cmp);
+            tree.insert(books[i].id, &books[i], insertion_cmp);
         }
         t1 = double(clock()) / CLOCKS_PER_SEC;
         insertion_time += t1 - t0;
