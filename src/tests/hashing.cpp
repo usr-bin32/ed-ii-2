@@ -15,6 +15,8 @@
 
 // le o csv de authors e os adicionam em uma hash table
 void read_authors(hash_table<author> &authors);
+void read_books_hash(hash_table<book> &books, hash_table<author> &authors,
+                     int n);
 
 void test_hashing() {
     int n = 0;
@@ -29,36 +31,14 @@ void test_hashing() {
         std::cin >> m;
     } while (m > n || m <= 0);
 
-    hash_table<author> hash_authors(244000);
-    read_authors(hash_authors);
+    hash_table<author> authors(244000);
+    read_authors(authors);
 
-    std::vector<book> books;
-    read_books(books);
-    shuffle(books);
-    books.resize(n);
-
-    // armazenando os livros lidos em uma hash table
-    // coloca as ocorrencias dos autores na hash authors e verifica se tem algum
-    // autor nao cadastrado no csv
-    hash_table<book> hash_books(n * 1.15);
-    for (auto &b : books) {
-        hash_books.insert(b.id, b);
-
-        for (int id : b.authors) {
-            author *a = hash_authors.search(id);
-            if (a != nullptr) {
-                a->occurrences += 1;
-            } else {
-                author aux;
-                aux.name = "Desconhecido";
-                aux.occurrences = 1;
-                hash_authors.insert(id, aux);
-            }
-        }
-    }
+    hash_table<book> books(n * 1.15);
+    read_books_hash(books, authors, n);
 
     std::vector<author> author_vec;
-    hash_authors.to_vector(author_vec);
+    authors.to_vector(author_vec);
     quick_sort(author_vec.data(), author_vec.size());
 
     // imprimindo as ocorrencias de autores em ordem decrescente
@@ -90,5 +70,55 @@ void read_authors(hash_table<author> &authors) {
         parser.get(1, a.name);
 
         authors.insert(id, std::move(a));
+    }
+}
+
+void read_books_hash(hash_table<book> &books, hash_table<author> &authors,
+                     int n) {
+    csv_parser parser("./res/books.csv");
+
+    if (!parser.is_open()) {
+        std::cerr << "Failed to open `books.csv`!" << std::endl;
+        return;
+    }
+
+    std::vector<int> indices(n);
+    // o número utilizado equivale à quantidade de linhas no arquivo CSV
+    generate_indices(indices, 1086955);
+    // os índices devem estar ordenados, pois a leitura do arquivo é sequencial
+    std::sort(indices.begin(), indices.end());
+
+    int i = 0;
+    for (int index : indices) {
+        while (i != index) {
+            parser.read_line();
+            i++;
+        }
+
+        book b;
+        parser.get(0, b.authors);
+        parser.get(1, b.bestsellers_rank);
+        parser.get(2, b.categories);
+        parser.get(3, b.edition);
+        parser.get(4, b.id);
+        parser.get(5, b.isbn10);
+        parser.get(6, b.isbn13);
+        parser.get(7, b.rating);
+        parser.get(8, b.rating_count);
+        parser.get(9, b.title);
+
+        books.insert(b.id, std::move(b));
+
+        for (int id : b.authors) {
+            author *a = authors.search(id);
+            if (a != nullptr) {
+                a->occurrences += 1;
+            } else {
+                author aux;
+                aux.name = "Desconhecido";
+                aux.occurrences = 1;
+                authors.insert(id, aux);
+            }
+        }
     }
 }

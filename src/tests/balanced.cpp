@@ -14,6 +14,7 @@
 constexpr int NUM_TESTS = 5;
 
 void read_input(std::vector<int> &input_sizes);
+void read_books(std::vector<book> &books);
 void generate_keys(std::vector<long> &keys);
 
 void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
@@ -99,30 +100,34 @@ void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
         double t0;
         double t1;
 
-        shuffle(books);
         red_black_tree<book *> tree;
 
+        std::vector<int> indices(n);
+        generate_indices(indices, books.size());
+
+        // inserção
         t0 = double(clock()) / CLOCKS_PER_SEC;
-        for (int i = 0; i < n; i++) {
+        for (int i : indices) {
             tree.insert(books[i].id, &books[i], insertion_cmp);
         }
         t1 = double(clock()) / CLOCKS_PER_SEC;
         insertion_time += t1 - t0;
 
-        t0 = double(clock()) / CLOCKS_PER_SEC;
-
         // busca com chaves aleatórias
         std::vector<long> random_keys(n * random_frac);
         generate_keys(random_keys);
+        std::cout << "RANDOM: " << random_keys.size() << std::endl;
+        t0 = double(clock()) / CLOCKS_PER_SEC;
         for (auto key : random_keys) {
             tree.search(key, search_cmp);
         }
 
         // busca com chaves presentes
-        for (int i = 0; i < static_cast<int>(n * (1 - random_frac)); i++) {
-            tree.search(books[i].id, search_cmp);
-        }
+        std::cout << "PRESENT: " << (int)(n * (1 - random_frac)) << std::endl;
 
+        for (int i = 0; i < n * (1 - random_frac); i++) {
+            tree.search(books[indices[i]].id, search_cmp);
+        }
         t1 = double(clock()) / CLOCKS_PER_SEC;
         search_time += t1 - t0;
     }
@@ -159,30 +164,32 @@ void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
         double t0;
         double t1;
 
-        shuffle(books);
         btree<book *> tree(degree);
 
+        std::vector<int> indices(n - n * random_frac);
+        generate_indices(indices, books.size());
+
+        // inserção
         t0 = double(clock()) / CLOCKS_PER_SEC;
-        for (int i = 0; i < n; i++) {
+        for (int i : indices) {
             tree.insert(books[i].id, &books[i], insertion_cmp);
         }
         t1 = double(clock()) / CLOCKS_PER_SEC;
         insertion_time += t1 - t0;
 
-        t0 = double(clock()) / CLOCKS_PER_SEC;
-
         // busca com chaves aleatórias
         std::vector<long> random_keys(n * random_frac);
         generate_keys(random_keys);
+
+        t0 = double(clock()) / CLOCKS_PER_SEC;
         for (auto key : random_keys) {
             tree.search(key, search_cmp);
         }
 
         // busca com chaves presentes
-        for (int i = 0; i < static_cast<int>(n * (1 - random_frac)); i++) {
-            tree.search(books[i].id, search_cmp);
+        for (int i = 0; i < n * (1 - random_frac); i++) {
+            tree.search(books[indices[i]].id, search_cmp);
         }
-
         t1 = double(clock()) / CLOCKS_PER_SEC;
         search_time += t1 - t0;
     }
@@ -220,4 +227,30 @@ void generate_keys(std::vector<long> &keys) {
     std::generate(keys.begin(), keys.end(), [&distribution, &generator]() {
         return distribution(generator);
     });
+}
+
+void read_books(std::vector<book> &books) {
+    csv_parser parser("./res/books.csv");
+
+    if (!parser.is_open()) {
+        std::cerr << "Falha ao tentar abrir `books.csv`!" << std::endl;
+        return;
+    }
+
+    while (parser.read_line()) {
+        book b;
+
+        parser.get(0, b.authors);
+        parser.get(1, b.bestsellers_rank);
+        parser.get(2, b.categories);
+        parser.get(3, b.edition);
+        parser.get(4, b.id);
+        parser.get(5, b.isbn10);
+        parser.get(6, b.isbn13);
+        parser.get(7, b.rating);
+        parser.get(8, b.rating_count);
+        parser.get(9, b.title);
+
+        books.push_back(std::move(b));
+    }
 }
