@@ -15,7 +15,7 @@ constexpr int NUM_TESTS = 5;
 void read_input(std::vector<int> &input_sizes);
 void read_books(std::vector<book> &books);
 void shuffle(std::vector<book> &books);
-void generate_keys(std::vector<int> &keys);
+void generate_keys(std::vector<long> &keys);
 
 void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
                     std::ofstream &search_out);
@@ -31,12 +31,16 @@ void test_balanced() {
         return;
     }
 
-    float fraction = 0.0f;
-    do {
-        std::cout << "Insira a fração das chaves buscadas que será aleatória "
-                     "(0 a 1): ";
-        std::cin >> fraction;
-    } while (fraction < 0 || fraction > 1);
+    // WIP
+    // float fraction = 0.0f;
+    // do {
+    //     std::cout << "Insira a fração das chaves buscadas que será aleatória
+    //     "
+    //                  "(0 a 1): ";
+    //     std::cin >> fraction;
+    // } while (fraction < 0 || fraction > 1);
+
+    // std::cout << std::endl;
 
     std::vector<book> books;
     read_books(books);
@@ -120,7 +124,6 @@ void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
         double t1;
 
         shuffle(books);
-
         red_black_tree<book> tree;
 
         t0 = double(clock()) / CLOCKS_PER_SEC;
@@ -171,7 +174,6 @@ void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
         double t1;
 
         shuffle(books);
-
         btree<book> tree(degree);
 
         t0 = double(clock()) / CLOCKS_PER_SEC;
@@ -215,8 +217,13 @@ void shuffle(std::vector<book> &books) {
     std::shuffle(books.begin(), books.end(), std::default_random_engine(seed));
 }
 
-void generate_keys(std::vector<int> &keys) {
-    std::uniform_int_distribution<int> distribution(0, 1000);
+void generate_keys(std::vector<long> &keys) {
+    // os valores utilizados abaixo são os valores mínimo e máximo que um id
+    // pode ter dentro do arquivo de livros. Em uma distribuição uniforme, é
+    // estimado que apenas 0.0040% dos números gerados sejam um id existente,
+    // praticamente zero.
+    std::uniform_int_distribution<long> distribution(9771130767002,
+                                                     9798484760114);
     std::default_random_engine generator;
     generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
 
