@@ -1,5 +1,7 @@
+#include <string>
+
 struct author {
-    int id;
+    std::string name;
     int occurrences = 0;
 
     bool operator>(const author &a2);
