@@ -27,7 +27,7 @@ class bnode {
   private:
     int degree;
 
-    int search_key(long key, int &comparisons);
+    int search_key(long key);
     void remove_leaf(int i);
     void remove_not_leaf(int i);
     long get_predecessor(int i);
@@ -86,10 +86,10 @@ template <typename T>
 void bnode<T>::walk() {
     int i;
     for (i = 0; i < num_keys; i++) {
-        if (leaf == false)
+        if (leaf == false && children[i] != nullptr)
             children[i]->walk();
     }
-    if (leaf == false)
+    if (leaf == false && children[i] != nullptr)
         children[i]->walk();
 }
 
@@ -164,12 +164,10 @@ void bnode<T>::split(bnode *node, int index) {
 }
 
 template <typename T>
-int bnode<T>::search_key(long key, int &comparisons) {
+int bnode<T>::search_key(long key) {
     int i = 0;
-    comparisons++;
-    for (i = 0; i < num_keys && keys[i] < key; ++i) {
-        comparisons++;
-    }
+    for (i = 0; i < num_keys && keys[i] < key; ++i)
+        ;
     return i;
 }
 
