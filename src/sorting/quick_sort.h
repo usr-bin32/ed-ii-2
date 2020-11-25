@@ -15,19 +15,19 @@ int slice(T *arr, int first, int end) {
     do {
         do {
             i++;
-            comparisons++;
-        } while (arr[i] < pivot);
+       
+        } while (arr[i] > pivot);
 
         do {
             j--;
-            comparisons++;
-        } while (arr[j] > pivot);
+
+        } while (arr[j] < pivot);
 
         if (i < j) {
             T aux = arr[i];
             arr[i] = arr[j];
             arr[j] = aux;
-            swaps++;
+
         }
     } while (i < j);
     return j;
