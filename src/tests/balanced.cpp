@@ -13,12 +13,23 @@
 
 constexpr int NUM_TESTS = 5;
 
+// Lê o arquivo de entrada que contém os valores de N a serem utilizados nos
+// testes
 void read_input(std::vector<int> &input_sizes);
+// Lê todos os livros do arquivo `books.csv` e os armazena num vector de structs
+// book
 void read_books(std::vector<book> &books);
+// Preenche um vector com chaves aleatórias que serão utilizadas no teste
+// das buscas nas estruturas balanceadas. O tamanho do conjunto gerado é o mesmo
+// tamanho do vector de entrada keys. Pode haver repetição entre chaves
 void generate_keys(std::vector<long> &keys);
 
+// Testa a inserção e a busca na Árvore Vermelho-Preto e registra as
+// estatísticas de performance na saída padrão e nos arquivos de saída
 void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
                     std::ofstream &search_out, float random_frac);
+// Testa a inserção e a busca na Árvore B e registra as estatísticas de
+// performance na saída padrão e nos arquivos de saída
 void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
                 std::ofstream &search_out, float random_frac, int degree);
 
@@ -31,6 +42,9 @@ void test_balanced() {
         return;
     }
 
+    // lê o fração aleatória a partir da entrada padrão. Essa fração determinará
+    // quantas das N buscas usarão chaves geradas aleatoriamente, que muito
+    // possivelmente não estarão na árvore.
     float random_frac = 0.0f;
     do {
         std::cout << "Insira a fração das chaves buscadas que será aleatória "
@@ -40,12 +54,16 @@ void test_balanced() {
 
     std::cout << std::endl;
 
+    // faz a leitura do arquivo CSV de livros
     std::vector<book> books;
     read_books(books);
 
+    // abre as streams para a escrita dos arquivos de saída, que armazenarão as
+    // estatísticas de teste
     std::ofstream insert_out("./saidaInsercao.txt", std::ios_base::trunc);
     std::ofstream search_out("./saidaBusca.txt", std::ios_base::trunc);
 
+    // Para cada valor de N no arquivo de entrada, realiza uma série de testes
     for (int n : input_sizes) {
         std::cout << "N = " << n << std::endl;
         insert_out << "N = " << n << std::endl;
@@ -96,12 +114,15 @@ void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
         double t0;
         double t1;
 
+        // Inicializa a árvore. Por questões de desempenho, ela armazena
+        // ponteiros
         red_black_tree<book *> tree;
 
+        // Gera um conjunto de N livros a serem inseridos
         std::vector<int> indices(n);
         generate_indices(indices, books.size());
 
-        // inserção
+        // Realiza a inserção dos elementos
         t0 = double(clock()) / CLOCKS_PER_SEC;
         for (int i : indices) {
             tree.insert(books[i].id, &books[i], insertion_cmp);
@@ -109,16 +130,18 @@ void test_red_black(std::vector<book> &books, int n, std::ofstream &insert_out,
         t1 = double(clock()) / CLOCKS_PER_SEC;
         insertion_time += t1 - t0;
 
-        // busca com chaves aleatórias
+        // Gera um conjunto de chaves aleatórias, respeitando a fração
         std::vector<long> random_keys(n * random_frac);
         generate_keys(random_keys);
 
+        // Realiza as buscas com as chaves aleatórias
         t0 = double(clock()) / CLOCKS_PER_SEC;
         for (auto key : random_keys) {
             tree.search(key, search_cmp);
         }
 
-        // busca com chaves presentes
+        // Realiza as buscas usando as mesmas chaves inseridas na árvore,
+        // respeitando a fração
         for (int i = 0; i < n * (1 - random_frac); i++) {
             tree.search(books[indices[i]].id, search_cmp);
         }
@@ -158,12 +181,15 @@ void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
         double t0;
         double t1;
 
+        // Inicializa a árvore. Por questões de desempenho, ela armazena
+        // ponteiros
         btree<book *> tree(degree);
 
+        // Gera um conjunto de N livros a serem inseridos
         std::vector<int> indices(n);
         generate_indices(indices, books.size());
 
-        // inserção
+        // Realiza a inserção dos elementos
         t0 = double(clock()) / CLOCKS_PER_SEC;
         for (int i : indices) {
             tree.insert(books[i].id, &books[i], insertion_cmp);
@@ -171,16 +197,18 @@ void test_btree(std::vector<book> &books, int n, std::ofstream &insert_out,
         t1 = double(clock()) / CLOCKS_PER_SEC;
         insertion_time += t1 - t0;
 
-        // busca com chaves aleatórias
+        // Gera um conjunto de chaves aleatórias, respeitando a fração
         std::vector<long> random_keys(n * random_frac);
         generate_keys(random_keys);
 
+        // Realiza as buscas com as chaves aleatórias
         t0 = double(clock()) / CLOCKS_PER_SEC;
         for (auto key : random_keys) {
             tree.search(key, search_cmp);
         }
 
-        // busca com chaves presentes
+        // Realiza as buscas usando as mesmas chaves inseridas na árvore,
+        // respeitando a fração
         for (int i = 0; i < n * (1 - random_frac); i++) {
             tree.search(books[indices[i]].id, search_cmp);
         }
@@ -212,7 +240,7 @@ void generate_keys(std::vector<long> &keys) {
     // os valores utilizados abaixo são os entre os quartis 25% e 75% da
     // distribuição estatística dos ids dos livros no arquivo, que se concentra
     // num intervalo reduzido. Em uma distribuição uniforme, é estimado que
-    // apenas 0.06% dos números gerados sejam um id existente, praticamente
+    // apenas 0,06% dos números gerados sejam um id existente, praticamente
     // zero.
     std::uniform_int_distribution<long> distribution(9780804842776,
                                                      9781727805954);
