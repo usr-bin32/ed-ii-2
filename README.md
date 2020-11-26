@@ -7,7 +7,7 @@ Segunda parte do trabalho da disciplina de Esturutra de Dados II (2020.1-B).
 O projeto foi testado com o compilador GCC (G++) tanto no Linux quanto sua versão no Windows (MinGW) e é compatível com C++ 11 ou mais novo. Para compilar o projeto, basta executar o makefile na pasta raiz do projeto (comando `make`) ou rodar o seguinte comando:
 
 ```sh
-g++ src/main.cpp src/tests/hashing.cpp src/tests/common.cpp src/tests/balanced.cpp src/structures/author.cpp src/parsing/csv_parser.cpp -Ofast -std=c++11 -o ./project.out
+g++ src/main.cpp src/tests/hashing.cpp src/tests/common.cpp src/tests/balanced.cpp src/structures/author.cpp src/parsing/csv_parser.cpp -Ofast -std=c++11 -o ./program.out
 ```
 
 ## Modo de Uso
