@@ -195,7 +195,7 @@ void red_black_tree<T>::fix_violation(rbnode<T> *&node, rbnode<T> *&pt) {
         }
 
         /* Case : B
-           O pai do pt é filho certo do avô do pt
+           O pai do pt é filho direito do avô do pt
         */
         else {
             rbnode<T> *uncle_pt = grand_parent_pt->left;
